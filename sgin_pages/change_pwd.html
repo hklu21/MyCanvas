@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        @import url('log_in.css');
+    </style>
+</head>
+<body class="chpsd_body">
+    <div id="wrapper">
+        <section id="chpsd_box">
+            <h2>Change Passward</h2>
+            <form id="chpsd_form" action="/action_page.php" method="post">
+                <div id="alert" role="alert" class="active">
+                    <p>Current Password is required.</p>
+                </div>
+                <div class="input-wrapper">
+                    <input type="password" name="password" id="password" placeholder="*Current Password">
+                </div>
+                <div id="alert" role="alert" class="active">
+                    <p>Password is required.</p>
+                </div>
+                <div class="input-wrapper">
+                    <input type="password" name="password" id="password" placeholder="*New Password">
+                </div>
+                <div id="alert" role="alert" class="active">
+                    <p>Password confirmation is required.</p>
+                </div>
+                <div class="input-wrapper">
+                    <input type="password" name="confirm_password" id="confirm_password" placeholder="*Confirm Password">
+                </div>
+
+
+                <div class="submit_buttons">
+                    <div id="chpsg_button">
+                        <button type="submit" id="chpsd_submit">CONFIRM</button>
+                    </div>
+                </div>
+    
+            </form>
+        </main>
+    </div>
+</body>
+</html>
