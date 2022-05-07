@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        @import url('account.css');
+    </style>
+</head>
+<body class="account_body">
+    <section id="account_box">
+        <h2>My Accout Information</h2>
+        <form id="accout_form" action="/action_page.php" method="post">
+            <div>
+                <h4>Name：</h4>
+                <p contenteditable="true" class="edit">Your Name</p>
+            </div>
+            <div>
+                <h4>Email：</h4>
+                <p contenteditable="true" class="edit">Your Email</p>
+            </div>
+            <div>
+                <h4>Student ID：</h4>
+                <p contenteditable="true" class="edit">Your ID</p>
+            </div>
+            
+            <div class="submit_buttons">
+                <div id="account_button">
+                    <button id="edit_save">Edit Profile/Save</button>
+                </div>
+                <button type="submit" class="b1">Change Password</button>
+                <button class="b1">Change Security Questions</button>
+            </div>
+            <div class="security_questions">
+                <h6>Security Question 1</h6>
+                <input type="text" name="security_question_1" id="q1" placeholder="What's father's first name?">
+                
+                <h6>Security Question 2</h6>
+                <input type="text" name="security_question_1" id="q2" placeholder="What is favorite sports?">
+                
+                <h6>Security Question 3</h6>
+                <input type="text" name="security_question_1" id="q3" placeholder="What is your favorite city?">
+                <div class="submit_buttons">
+                    <div id="account_button">
+                        <button id="edit_save">Save</button>
+                    </div>
+                </div>
+            </div>
+            
+        </form>
+    </section>
+</body>
+</html>
