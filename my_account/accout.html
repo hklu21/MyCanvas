@@ -6,8 +6,19 @@
     </style>
 </head>
 <body class="account_body">
+    <!-- Navigation -->  
+    <nav>
+        <img src="logo.png" alt="">
+        <div class="topnav">
+            <a class="active" href="#Account">Account</a>
+            <a href="#Dashboard">Dashboard</a>
+            <a href="#Course">Course</a>
+            <a href="#Assignments">Assignments</a>
+            <a href="#Setting">Setting</a>
+        </div>
+    </nav>
+    <h1>My Accout Information</h1>
     <section id="account_box">
-        <h2>My Accout Information</h2>
         <form id="accout_form" action="/action_page.php" method="post">
             <div>
                 <h4>Name：</h4>
@@ -30,6 +41,7 @@
                 <button class="b1">Change Security Questions</button>
             </div>
             <div class="security_questions">
+                <br>
                 <h6>Security Question 1</h6>
                 <input type="text" name="security_question_1" id="q1" placeholder="What's father's first name?">
                 
