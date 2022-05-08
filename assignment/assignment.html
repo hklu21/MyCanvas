@@ -5,8 +5,11 @@
         <link rel="stylesheet" href="../common/navigation.css">
         <script>
             $(function() {
-                $("#navigation").load("../common/navigation.html");
+                $("#navigation").load("../common/navigation.html", function() {
+                    $('#topnav-assignments').addClass("active");  // Set default active navigation bar item
+                });
             });
+            
         </script>
     </head>
 

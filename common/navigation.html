@@ -1,10 +1,25 @@
+<!-- Changing the color of active nav-item -->
+<script>
+    $(document).ready(function() {
+        "use strict";
+        $('div.topnav > a').click(function(e) {
+            e.preventDefault();
+            $('div.topnav > a').removeClass('active');
+            $(this).addClass('active');
+        });
+    });
+</script>
+
+<!-- Navigation bar at the top of each page -->
 <nav>
     <img src="../common/logo.png" alt="">
     <div class="topnav">
-        <a class="active" href="#Account">Account</a>
-        <a href="#Dashboard">Dashboard</a>
-        <a href="#Course">Course</a>
-        <a href="#Assignments">Assignments</a>
-        <a href="#Setting">Setting</a>
+        <a id="topnav-account" href="#Account">Account</a>
+        <a id="topnav-dashboard" href="#Dashboard">Dashboard</a>
+        <a id="topnav-course" href="#Course">Course</a>
+        <a id="topnav-assignments" href="#Assignments">Assignments</a>
+        <a id="topnav-setting" href="#Setting">Setting</a>
     </div>
 </nav>
+
+            
