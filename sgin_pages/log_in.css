@@ -133,3 +133,38 @@ button {
     font-weight: 500;
     color: #fff;
 }
+
+@media screen and (max-width: 1800px) {
+    
+    #wrapper section {
+        max-width: 40%;
+    }    
+}
+
+@media screen and (max-width: 1350px) {
+    
+    #wrapper section {
+        max-width: 55%;
+    }    
+}
+
+@media screen and (max-width: 1000px) {
+    
+    #wrapper section {
+        max-width: 70%;
+    }    
+}
+
+@media screen and (max-width: 800px) {
+    
+    #wrapper section {
+        max-width: 85%;
+    }    
+
+    form {
+        width: 100%;
+    }
+    form#signup_form, #chpsd_form, #fgpsd_form{
+        width: 100%;
+    }
+}

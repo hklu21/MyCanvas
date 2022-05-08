@@ -153,6 +153,111 @@ nav img{
     background-color: #2196F3;
     color: white;
   }
+
+  @media screen and (max-width: 600px) {
+    nav .navigation ul, .topnav a, .topright, .topnav input[type=text] {
+      float: none;
+      display: block;
+      text-align: left;
+      width: 100%;
+      margin: 0;
+      padding: 14px;
+    }
+    .topnav input[type=text] {
+      border: 1px solid #ccc;
+    }
+  }
+  /*Grade bar/button */
+  .bar{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  button{
+    background-color: grey; 
+    color: white;
+    border-radius: 8px;
+    padding: 5px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 12px;
+    transition-duration: 0.4s;
+  }
+  button:hover{
+    background-color: #4CAF50; 
+    color: white;
+  }
+  /*top right corner*/
+  .topright {
+    position:absolute;
+    right: 0;
+    top: 10;
+    display: block;
+    height: 12px;
+    width: 125px;
+    background: url(TRbanner.gif) no-repeat;
+    text-indent: -999em;
+    text-decoration: none;
+  }
+  .t{
+    border-collapse: collapse;
+  }
+  .t tr {
+    border-bottom: 1px solid black;
+  }
+
+  @media screen and (max-width: 1800px) {
+    
+    #wrapper section {
+        max-width: 40%;
+    }    
+}
+
+@media screen and (max-width: 1350px) {
+    
+    #wrapper section {
+        max-width: 55%;
+    }    
+}
+
+@media screen and (max-width: 1000px) {
+    
+    #wrapper section {
+        max-width: 70%;
+    }    
+}
+
+@media screen and (max-width: 1800px) { 
+    form button#edit_save {
+        width: 30%;
+    }    
+}
+
+@media screen and (max-width: 1500px) {
+    form button#edit_save {
+        width: 40%;
+    } 
+}
+
+@media screen and (max-width: 1200px) {
+    form input[type="text"], section form p.edit, form button#edit_save{
+        width: 60%;
+    }
+    
+}
+
+@media screen and (max-width: 800px) {
+    form input[type="text"], section form p.edit, form button#edit_save{
+        width: 80%;
+    } 
+}
+
+@media screen and (max-width: 600px) {
+    form input[type="text"], section form p.edit, form button#edit_save{
+        width: 100%;
+    } 
+}
   
 
   
