@@ -1,0 +1,72 @@
+body{
+    font-family: 'Poppins',sans-serif;
+    padding: 10px;
+ }    
+
+table {
+    border: 2px solid lightgrey;
+    border-collapse: collapse;
+    width: 100%;
+}
+
+thead {
+    border: 2px solid lightgrey;
+}
+
+th, td {
+    text-align: left;
+    padding: 8px;
+    height: 30px;
+}
+
+tr:nth-child(even) {background-color: #f2f2f2;}
+
+.setting_page {
+    margin-left: auto;
+    margin-right: auto;
+    width: 75%;
+}
+
+.search-filter {
+    margin-top: 5%;
+    margin-bottom: 2%;
+    display: flex; 
+    justify-content: space-between; 
+}
+
+input[type=text] {
+    box-sizing: border-box;
+    height: 30px;
+}
+
+
+button[type=submit] {
+    box-sizing: border-box;
+    height: 30px;
+}
+
+/* Style the buttons */
+.btn {
+    box-sizing: border-box;
+    border: none;
+    outline: none;
+    height: 30px;
+    width: 80px;
+    background-color: #f1f1f1;
+    cursor: pointer;
+}
+  
+.btn:hover {
+    background-color: #ddd;
+}
+
+@media screen and (max-width: 600px) {
+    .setting_page {
+        width: 100%;
+    }
+    
+    .search-filter {
+        flex-direction: column;
+        gap: 12px;
+    }
+}

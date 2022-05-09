@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+        <link rel="stylesheet" href="../common/navigation.css">
+        <link rel="stylesheet" href="assignment-create.css">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script>
+            $(function() {
+                $("#navigation").load("../common/navigation.html", function() {
+                    $('#topnav-assignments').addClass("active");  // Set default active navigation bar item https://stackoverflow.com/questions/39738519/how-to-add-class-to-a-html-file-loaded-via-jquery
+                });
+            });
+        
+        </script>
+        <title>create assignment</title>
+    </head>
+
+    <body>
+        <!-- Navigation -->
+        <div id="navigation"></div>
+
+        <!-- Create Assignment -->
+        <div class="create_assignment_page">
+            <form action="">
+                <label for="assign_title">Assignment Title:</label>
+                <input type="text" id="assign_title" name="assign_title" size="50"><br><br>
+
+
+                <label for="assign_point">Maximum Points:</label>
+                <input type="number" id="assign_point" name="assign_point" min="1" max="200"><br><br>
+
+
+                <label for="assign_detail">Details:</label><br>
+                <textarea id="assign_detail" rows="10" cols="100%"></textarea> <br><br>
+                <input type="submit" value="Create Assignment">
+            </form>
+        </div>
+
+
+
+
+    </body>
+</html>

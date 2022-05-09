@@ -3,17 +3,53 @@
     <head>
         <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
         <link rel="stylesheet" href="../common/navigation.css">
+        <link rel="stylesheet" href="assignment.css">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <script>
             $(function() {
                 $("#navigation").load("../common/navigation.html", function() {
-                    $('#topnav-assignments').addClass("active");  // Set default active navigation bar item
+                    $('#topnav-assignments').addClass("active");  // Set default active navigation bar item https://stackoverflow.com/questions/39738519/how-to-add-class-to-a-html-file-loaded-via-jquery
                 });
             });
             
         </script>
+        <title>assignment</title>
     </head>
 
     <body>
+        <!-- Navigation -->
         <div id="navigation"></div>
+
+        <!-- Assignment -->
+        <div class="assignment_page">
+            <h1>Assignments</h1>
+            
+            <div class="all-assignments">
+                <div class="assign-row-layout">
+                    <a href="" class="assign-name-link" >Assignment 1</a>
+                    <div class="assign-row-detail">
+                        <p class="assign-row-detail-date">Due on May 8th</p>
+                        <p class="assign-row-detail-point">3 points</p>
+                    </div>
+                </div>
+                <div class="assign-row-layout">
+                    <a href="" class="assign-name-link" >Assignment 2</a>
+                    <div class="assign-row-detail">
+                        <p class="assign-row-detail-date">Due on May 8th</p>
+                        <p class="assign-row-detail-point">3 points</p>
+                    </div>
+                </div>
+                <div class="assign-row-layout">
+                    <a href="" class="assign-name-link" >Final project</a>
+                    <div class="assign-row-detail">
+                        <p class="assign-row-detail-date">Due on May 8th</p>
+                        <p class="assign-row-detail-point">3 points</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        
+
     </body>
 </html>
