@@ -1,0 +1,306 @@
+import React from 'react';
+import './account.css';
+
+class SecurityQuestions extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            ans_1: '',
+            ans_2: '',
+            ans_3: '',
+        };
+        this.clickSave = this.clickSave.bind(this);
+        this.handleQuestion1 = this.handleQuestion1.bind(this);
+        this.handleQuestion2 = this.handleQuestion2.bind(this);
+        this.handleQuestion3 = this.handleQuestion3.bind(this);
+    }
+
+    handleQuestion1(event) {
+        this.setState({ans_1: event.target.value});
+    }
+
+    handleQuestion2(event) {
+        this.setState({ans_2: event.target.value});
+    }
+
+    handleQuestion3(event) {
+        this.setState({ans_3: event.target.value});
+    }
+
+    clickSave(event) {
+        this.props.handleQuestion1(this.state.ans_1);
+        this.props.handleQuestion2(this.state.ans_2);
+        this.props.handleQuestion3(this.state.ans_3);
+        this.props.clickSave();
+        event.preventDefault();
+    }
+
+    render() {
+        return this.props.isChangingSQ? (
+            <div className="security_questions">
+                <br/>
+                <h6>Security Question 1</h6>
+                <input type="text" name="security_question_1" id="q1" placeholder="What's father's first name?"
+                    onChange={this.handleQuestion1}
+                />
+                
+                <h6>Security Question 2</h6>
+                <input type="text" name="security_question_1" id="q2" placeholder="What is favorite sports?"
+                    onChange={this.handleQuestion2}
+                />
+                
+                <h6>Security Question 3</h6>
+                <input type="text" name="security_question_1" id="q3" placeholder="What is your favorite city?"
+                    onChange={this.handleQuestion3}
+                />
+                <div className="submit_buttons">
+                    <div id="account_button">
+                        <button id="edit_save" onClick={this.clickSave}>Save</button>
+                    </div>
+                </div>
+            </div>
+        ) : null;
+    }
+}
+
+class ChangePwd extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            pwd_1: '',
+            pwd_2: '',
+            pwd_3: '',
+            alert: ['', '', ''],
+            alertShow: [false, false, false],
+        };
+        this.handlePwdChange1 = this.handlePwdChange1.bind(this);
+        this.handlePwdChange2 = this.handlePwdChange2.bind(this);
+        this.handlePwdChange3 = this.handlePwdChange3.bind(this);
+        this.clickConfirm = this.clickConfirm.bind(this);
+    }
+
+    handlePwdChange1(event) {
+        this.setState({pwd_1: event.target.value});
+    }
+
+    handlePwdChange2(event) {
+        this.setState({pwd_2: event.target.value});
+    }
+
+    handlePwdChange3(event) {
+        this.setState({pwd_3: event.target.value});
+    }
+
+    clickConfirm(event) {
+        if (this.state.pwd_1 === "") {
+            const newAlert = this.state.alert.slice();
+            newAlert[0] = "Current password is required."
+            this.setState({alert: newAlert});
+            this.setState({alertShow: [true, false, false]});
+        } else if (this.state.pwd_1 !== this.props.pwd) {
+            const newAlert = this.state.alert.slice();
+            newAlert[0] = "Wrong password."
+            this.setState({alert: newAlert});
+            this.setState({alertShow: [true, false, false]});
+        } else if (this.state.pwd_2 === "") 
+        {
+            const newAlert = this.state.alert.slice();
+            newAlert[1] = "Input new password."
+            this.setState({alert: newAlert});
+            this.setState({alertShow: [false, true, false]});
+        } else if (this.state.pwd_2.length !== 5 || !/\d/.test(this.state.pwd_2) || 
+            !/[`!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/.test(this.state.pwd_2)) 
+        {
+            /* password shoube 5 chars in length, at least 1 number and 1 symbol */ 
+            const newAlert = this.state.alert.slice();
+            newAlert[1] = "Invalid password."
+            this.setState({alert: newAlert});
+            this.setState({alertShow: [false, true, false]});
+        } else if (this.state.pwd_3 !== this.state.pwd_2) {
+            const newAlert = this.state.alert.slice();
+            newAlert[2] = "Password not consistent."
+            this.setState({alert: newAlert});
+            this.setState({alertShow: [false, false, true]});
+        } else {
+            this.setState({alertShow: [false, false, false]});
+            this.props.handlePwdChange(this.state.pwd_2);
+            this.props.clickConfirm();
+        }
+        event.preventDefault();
+    }
+
+    render() {
+        return this.props.isChangingPwd? (
+            <div className="security_questions">
+                <br/>
+                <h6>{this.state.alertShow[0]?this.state.alert[0]:""}</h6>
+                <input type="password" name="curr_pwd" id="curr_pwd" placeholder="*Current Password"
+                    onChange={this.handlePwdChange1}
+                />
+                
+                <h6>{this.state.alertShow[1]?this.state.alert[1]:""}</h6>
+                <input type="password" name="new_pwd" id="new_pwd" placeholder="*New Password"
+                    onChange={this.handlePwdChange2}
+                />
+                
+                <h6>{this.state.alertShow[2]?this.state.alert[2]:""}</h6>
+                <input type="password" name="confirm_new_pwd" id="confirm_new_pwd" placeholder="*Confirm Password"
+                    onChange={this.handlePwdChange3}
+                />
+                <div className="submit_buttons">
+                    <div id="account_button">
+                        <button id="reset_pwd" onClick={this.clickConfirm}>Confirm</button>
+                    </div>
+                </div>
+            </div>
+        ) : null;
+    }
+}
+
+
+class Account extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            email: this.props.email,
+            email_tmp: '',
+            ID: this.props.ID,
+            ID_tmp: '',
+            name: this.props.name,
+            name_tmp: '',
+            pwd: this.props.pwd,
+            isEditing: false,
+            isChangingPwd: false,
+            isChangingSQ: false,
+            ans_1: '',
+            ans_2: '',
+            ans_3: '',
+        };
+        this.handleNameChange = this.handleNameChange.bind(this);
+        this.handleEmailChange = this.handleEmailChange.bind(this);
+        this.handleIDChange = this.handleIDChange.bind(this);
+        this.handleQuestion1 = this.handleQuestion1.bind(this);
+        this.handleQuestion2 = this.handleQuestion2.bind(this);
+        this.handleQuestion3 = this.handleQuestion3.bind(this);
+        this.handlePwdChange = this.handlePwdChange.bind(this);
+        this.clickEditSave = this.clickEditSave.bind(this);
+        this.clickChangeSQ = this.clickChangeSQ.bind(this);
+        this.clickSave = this.clickSave.bind(this);
+        this.clickChangePwd = this.clickChangePwd.bind(this);
+        this.clickConfirm = this.clickConfirm.bind(this);
+    }
+
+
+    handleNameChange(event) {
+        this.setState({name_tmp: event.target.textContent});
+    }
+
+    handleEmailChange(event) {
+        this.setState({email_tmp: event.target.textContent});
+    }
+
+    handleIDChange(event) {
+        this.setState({ID_tmp: event.target.textContent});
+    }
+
+    handleQuestion1(ans) {
+        this.setState({ans_1: ans});
+    }
+
+    handleQuestion2(ans) {
+        this.setState({ans_2: ans});
+    }
+
+    handleQuestion3(ans) {
+        this.setState({ans_3: ans});
+    }
+
+    handlePwdChange(pwd) {
+        this.setState({pwd: pwd})
+    }
+
+
+    clickEditSave(event) {
+        if (this.state.isEditing){
+            this.setState({name: this.state.name_tmp});
+            this.setState({email: this.state.email_tmp});
+            this.setState({ID: this.state.ID_tmp});
+        }
+        this.setState({isEditing: !this.state.isEditing});
+        event.preventDefault();
+    }
+
+    clickChangeSQ(event) {
+        this.setState({isChangingSQ: true});
+        event.preventDefault();
+    }
+
+    clickSave() {
+        this.setState({isChangingSQ: false});
+    }
+
+    clickChangePwd(event) {
+        this.setState({isChangingPwd: true});
+        event.preventDefault();
+    }
+
+    clickConfirm() {
+        this.setState({isChangingPwd: false});
+    }
+
+
+
+    render() {
+        return(
+            <div id="accountPage">
+                <h1>My Accout Information</h1>
+                <section id="account_box">
+                    <form id="accout_form">
+                        <h2>{this.state.isEditing? "Editing your profile" : ""}</h2> 
+                        <div>
+                            <h4>Name：</h4>
+                            <p contentEditable={this.state.isEditing} suppressContentEditableWarning={true} className="edit"
+                                onInput={this.handleNameChange}>{this.state.name}</p>
+                        </div>
+                        <div>
+                            <h4>Email：</h4>
+                            <p contentEditable={this.state.isEditing} suppressContentEditableWarning={true} className="edit"
+                                onInput={this.handleEmailChange}>{this.state.email}</p>
+                        </div>
+                        <div>
+                            <h4>Student ID：</h4>
+                            <p contentEditable={this.state.isEditing} suppressContentEditableWarning={true} className="edit"
+                                onInput={this.handleIDChange}>{this.state.ID}</p>
+                        </div>
+                        
+                        <div className="submit_buttons">
+                            <div id="account_button">
+                                <button id="edit_save" onClick={this.clickEditSave} 
+                                    disabled={this.state.isChangingPwd||this.state.isChangingSQ}>
+                                    {this.state.isEditing? "SAVE" : "EDIT PROFILE"}
+                                </button>
+                            </div>
+                        </div>
+                        <button className="b1" onClick={this.clickChangePwd}
+                            disabled={this.state.isEditing||this.state.isChangingSQ}>
+                            Change Password
+                        </button>
+                        <button className="b1" onClick={this.clickChangeSQ}
+                            disabled={this.state.isEditing||this.state.isChangingPwd}>
+                            Change Security Questions
+                        </button>
+                        <SecurityQuestions isChangingSQ={this.state.isChangingSQ} clickSave={this.clickSave}
+                            handleQuestion1={this.handleQuestion1} handleQuestion2={this.handleQuestion2}
+                            handleQuestion3={this.handleQuestion3}
+                        />
+                        <ChangePwd isChangingPwd={this.state.isChangingPwd} clickConfirm={this.clickConfirm}
+                            handlePwdChange={this.handlePwdChange} pwd={this.state.pwd}
+                        />
+                    </form>
+                </section>
+            </div>
+        );
+    }
+}
+
+export default Account;
