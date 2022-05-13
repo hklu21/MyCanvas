@@ -34,7 +34,7 @@ class MainPages extends React.Component {
             ID: 'Student ID',
             accountType: '',
             userType: '',
-            pwd: '1231!',
+            pwd: 'asd1!',
             ans_1: 'ans1',
             ans_2: 'ans2',
             ans_3: 'asn3',
