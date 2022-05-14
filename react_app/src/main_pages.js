@@ -2,6 +2,7 @@ import React from 'react';
 import Account from './account';
 import logo from './logo.png'
 import './account.css';
+import Course from "./course";
 class NavBar extends React.Component {
     render() {
         return(
@@ -32,7 +33,7 @@ class MainPages extends React.Component {
             name: 'Name',
             email: this.props.email,
             ID: 'Student ID',
-            accountType: '',
+            accountType: this.props.accountType,
             userType: '',
             pwd: 'asd1!',
             ans_1: 'ans1',
@@ -120,6 +121,7 @@ class MainPages extends React.Component {
                             clickCourse={this.clickCourse} clickDashBoard={this.clickDashBoard}
                             clickSetting={this.clickSetting} clickLogOut={this.clickLogOut}
                         />
+                        <Course accountType={this.state.accountType}/>
                     </div>
                 );
             case "Setting":

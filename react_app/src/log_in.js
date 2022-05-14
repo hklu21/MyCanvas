@@ -79,7 +79,7 @@ class LogInForm extends React.Component {
             this.setState({alertShow: [false, true, false]});
         } else if (this.state.accountType === "") {
             const newAlert = this.state.alert.slice();
-            newAlert[2] = "Please select accout type."
+            newAlert[2] = "Please select account type."
             this.setState({alert: newAlert});
             this.setState({alertShow: [false, false, true]});
         }
@@ -119,8 +119,8 @@ class LogInForm extends React.Component {
                     />
                 </div>
                 <AlertMsg alert_msg={this.state.alert[2]} alertShow={this.state.alertShow[2]}/>
-                <select className="input-wrapper" name="type" id="type" onChange={this.handleAccountType} defaultValue="Accout Type">
-                    <option disabled>Accout Type</option>
+                <select className="input-wrapper" name="type" id="type" onChange={this.handleAccountType} defaultValue="Account Type">
+                    <option disabled>Account Type</option>
                     <option>User</option>
                     <option>Admin</option>
                 </select>

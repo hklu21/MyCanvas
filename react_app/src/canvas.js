@@ -15,9 +15,11 @@ class MyCanvas extends React.Component {
     }
 
     clickLogIn(email, type) {
-        this.setState({email: email});
-        this.setState({accountType: type});
-        this.setState({isLoggedIn: true});
+        this.setState({
+            email: email,
+            accountType: type,
+            isLoggedIn: true
+        });
     }
 
     clickLogOut() {
@@ -29,7 +31,7 @@ class MyCanvas extends React.Component {
             case false:
                 return <LogInSystem clickLogIn={this.clickLogIn}/>;
             case true:
-                return <MainPages email={this.state.email} clickLogOut={this.clickLogOut}/>;
+                return <MainPages email={this.state.email} accountType={this.state.accountType} clickLogOut={this.clickLogOut}/>;
             default:
                 return null;
         }
