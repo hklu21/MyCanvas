@@ -56,7 +56,7 @@ class MainPages extends React.Component {
     }
 
     clickCourse(){
-        alert("Course");
+        // alert("Course");
         this.setState({page: "Course"});
         this.setState({pageShow: [false, true, false, false]});
     }

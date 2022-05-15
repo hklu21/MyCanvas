@@ -25,7 +25,7 @@ class Assignment extends React.Component {
     renderAddAssignment = () => {
         return (
             <>
-            <div class="create_assignment_page">
+            <div className="create_assignment_page">
                 <h1> Create Assignment</h1>
                 <form onSubmit={(e) => {
                     e.preventDefault()
@@ -39,19 +39,19 @@ class Assignment extends React.Component {
 
                     e.target.reset()
                 }}>
-                    <label for="assign_title">Assignment Title:</label>
+                    <label htmlFor="assign_title">Assignment Title:</label>
                     <input type="text" id="assign_title" name="assign_title" size="50"/><br/><br/>
 
 
-                    <label for="assign_point">Maximum Points:</label>
+                    <label htmlFor="assign_point">Maximum Points:</label>
                     <input type="number" id="assign_point" name="assign_point" min="1" max="200"/><br/><br/>
 
 
-                    <label for="assign_due">Due Date:</label>
+                    <label htmlFor="assign_due">Due Date:</label>
                     <input type="text" id="assign_due" name="assign_due" size="50"/><br/><br/>
 
 
-                    <label for="assign_detail">Details:</label><br/>
+                    <label htmlFor="assign_detail">Details:</label><br/>
                     <textarea id="assign_detail" rows="10" cols="100%"></textarea> <br/><br/>
                     <input type="submit" value="Create Assignment"/>
                 </form>
@@ -63,19 +63,20 @@ class Assignment extends React.Component {
     render() {
         return (
             <>
-            <div class="assignment_page">
+            <div className="assignment_page">
                 <h1>Assignments</h1>
-                <div class="all-assignments">
-                    {this.state.assignments.map(assignment => <>
-                        <div class="assign-row-layout">
-                            <a href="#" class="assign-name-link">{assignment.name}</a>
-                            <div class="assign-row-detail">
-                                <p class="assign-row-detail-date">{assignment.dueDate}</p>
-                                <p class="assign-row-detail-point">{assignment.maxPoint}</p>
+                <div className="all-assignments">
+                    {this.state.assignments.map(( assignment, index )  => {
+                        return (
+                            <div className="assign-row-layout" key={index}>
+                                <a href="#" className="assign-name-link">{assignment.name}</a>
+                                <div className="assign-row-detail">
+                                    <p className="assign-row-detail-date">{assignment.dueDate}</p>
+                                    <p className="assign-row-detail-point">{assignment.maxPoint}</p>
+                                </div>
                             </div>
-                        </div>
-                        </>
-                    )}
+                        );
+                    })}
                 </div>
             </div>
 

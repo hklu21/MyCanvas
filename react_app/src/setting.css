@@ -12,7 +12,11 @@ body{
     border: 2px solid lightgrey;
 }
 
-.setting_page th, td {
+.setting_page thead td {
+    font-weight: bold;
+}
+
+.setting_page td {
     text-align: left;
     padding: 8px;
     height: 30px;
@@ -33,7 +37,7 @@ body{
     justify-content: space-between; 
 }
 
-.search-filter input[type=text] {
+input[type=text] {
     box-sizing: border-box;
     height: 30px;
 }
@@ -47,17 +51,17 @@ body{
 /* Style the buttons */
 .setting_page .btn {
     box-sizing: border-box;
-    border: none;
-    outline: none;
+    /* border: none;
+    outline: none; */
     height: 30px;
     width: 80px;
-    background-color: #f1f1f1;
+    /* background-color: #f1f1f1; */
     cursor: pointer;
 }
   
-.setting_page .btn:hover {
+/* .setting_page .btn:hover {
     background-color: #ddd;
-}
+} */
 
 @media screen and (max-width: 600px) {
     .setting_page {
