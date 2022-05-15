@@ -23,12 +23,33 @@ class Setting extends React.Component {
                 new UserItem("fake-student2", "fake2@uchicago.edu", "active"),
                 new UserItem("fake-student3", "fake3@uchicago.edu", "inactive"),
             ],
-            searchQuery: ""
+            searchQuery: "",
+            show: false,
+            editUser: new UserItem("fake-student1", "fake1@uchicago.edu", "active")
         }
+
+        this.showModal = this.showModal.bind(this);
+        this.hideModal = this.hideModal.bind(this);
 
         this.filterUser = this.filterUser.bind(this);
         this.searchUser = this.searchUser.bind(this);
     }
+
+    showModal = user => () => {
+        this.setState({ 
+            show: true,
+            editUser: user
+        });
+    };
+
+    hideModal = () => {
+        this.setState({ show: false });
+    };
+
+    saveModal = () => {
+        this.setState({ show: false });
+    };
+
 
     // Function to filter user when click buttons
     filterUser = status => (e) => {
@@ -105,6 +126,9 @@ class Setting extends React.Component {
                                         </td>
                                         <td>{user.status}
                                         </td>
+                                        <td>
+                                            <button onClick={this.showModal(user)}>Edit</button>
+                                        </td>
                                     </tr>
                                 );
                             })
@@ -113,11 +137,41 @@ class Setting extends React.Component {
                         </tbody>
                     </table>
                 </div>
+
+                <Modal show={this.state.show} handleClose={this.hideModal} handleSave={this.saveModal}>
+                    <p>Name: {this.state.editUser.name}</p>
+                    <p>Email: {this.state.editUser.email}</p>
+                    <p>Status: </p>
+                    <select name="status" id="user-status">
+                        <option value="active">Active</option>
+                        <option value="inactive">Inactive</option>
+                    </select>
+                </Modal>
             </div>
         </>
     }
 
 }
+
+
+// https://www.digitalocean.com/community/tutorials/react-modal-component
+const Modal = ({ handleClose, show, handleSave, children }) => {
+    const showHideClassName = show ? "modal display-block" : "modal display-none";
+  
+    return (
+      <div className={showHideClassName}>
+        <div className="modal-main">
+          <button type="button" onClick={handleClose}>
+            Close
+          </button>
+          <button type="button" onClick={handleSave}>
+            Save
+          </button>
+          {children}
+        </div>
+      </div>
+    );
+  };
 
 export default Setting;
 
