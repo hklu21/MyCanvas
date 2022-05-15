@@ -1,0 +1,83 @@
+body{
+    font-family: 'Poppins',sans-serif;
+    /* padding: 10px; */
+ }
+
+.assignment_page {
+    margin-left: auto;
+    margin-right: auto;
+    width: 75%;
+}
+
+.all-assignments {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    border: solid lightgrey;
+    border-width: 2px 0 0 2px;
+}
+.assign-row-layout {
+    padding: 10px;
+    border: solid lightgrey;
+    border-width: 0 2px 2px 0;
+}
+.assign-row-detail {
+    display: flex;
+    font-size: 12px;
+    gap: 20px;
+}
+.assign-name-link {
+    font-weight: bold;
+    color: black;
+    font-size: 16px;
+}  
+
+
+@media screen and (max-width: 600px) {
+    .assignment_page {
+        width: 100%;
+    }
+}
+
+
+/* create assignment */
+.create_assignment_page {
+    margin-left: auto;
+    margin-right: auto;
+    width: 75%;
+    margin-block-start: 2%;
+}
+
+textarea{
+    width: 100%;
+}
+
+input[type=number]{
+    width: 5%;
+}
+input[type=text]{
+    border: 0;
+    outline: 0;
+    background: transparent;
+    border-bottom: 1px solid black;
+}
+
+input[type=submit] {
+    background-color: #800000;
+    border: none;
+    color: white;
+    padding: 15px;
+    text-decoration: none;
+    margin: 4px 0px;
+    cursor: pointer;
+}
+
+@media screen and (max-width: 600px) {
+    .create_assignment_page, textarea, input[type=submit] {
+        width: 100%;
+    }
+    
+    input[type=number]{
+        width:10%;
+    }
+}

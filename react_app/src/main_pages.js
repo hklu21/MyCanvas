@@ -3,6 +3,7 @@ import Account from './account';
 import logo from './logo.png'
 import './account.css';
 import Course from "./course";
+import Setting from "./setting";
 class NavBar extends React.Component {
     render() {
         return(
@@ -66,7 +67,7 @@ class MainPages extends React.Component {
     }
 
     clickSetting(){
-        alert("Setting");
+        // alert("Setting");
         this.setState({page: "Setting"});
         this.setState({pageShow: [false, false, false, true]});
     }
@@ -131,6 +132,7 @@ class MainPages extends React.Component {
                             clickCourse={this.clickCourse} clickDashBoard={this.clickDashBoard}
                             clickSetting={this.clickSetting} clickLogOut={this.clickLogOut}
                         />
+                        <Setting />
                     </div>
                 );
             default:

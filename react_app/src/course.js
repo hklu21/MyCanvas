@@ -2,6 +2,7 @@ import React from 'react';
 import './course.css';
 import Announcement from "./announcement";
 import Grade from "./grade";
+import Assignment from "./assignment";
 
 
 const TABS = [
@@ -48,7 +49,8 @@ class Course extends React.Component {
                 currentTab = <Grade activeCourse={this.state.activeCourse} accountType={this.props.accountType}/>
                 break
             default:
-                currentTab = <>Coming soon!</>
+                // currentTab = <>Coming soon!</>
+                currentTab = <Assignment activeCourse={this.state.activeCourse} accountType={this.props.accountType}/>
         }
 
         return <section id="course">

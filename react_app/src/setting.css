@@ -1,0 +1,71 @@
+body{
+    font-family: 'Poppins',sans-serif;
+}    
+
+.setting_page table {
+    border: 2px solid lightgrey;
+    border-collapse: collapse;
+    width: 100%;
+}
+
+.setting_page thead {
+    border: 2px solid lightgrey;
+}
+
+.setting_page th, td {
+    text-align: left;
+    padding: 8px;
+    height: 30px;
+}
+
+.setting_page tr:nth-child(even) {background-color: #f2f2f2;}
+
+.setting_page {
+    margin-left: auto;
+    margin-right: auto;
+    width: 75%;
+}
+
+.search-filter {
+    margin-top: 5%;
+    margin-bottom: 2%;
+    display: flex; 
+    justify-content: space-between; 
+}
+
+.search-filter input[type=text] {
+    box-sizing: border-box;
+    height: 30px;
+}
+
+
+.setting_page button[type=submit] {
+    box-sizing: border-box;
+    height: 30px;
+}
+
+/* Style the buttons */
+.setting_page .btn {
+    box-sizing: border-box;
+    border: none;
+    outline: none;
+    height: 30px;
+    width: 80px;
+    background-color: #f1f1f1;
+    cursor: pointer;
+}
+  
+.setting_page .btn:hover {
+    background-color: #ddd;
+}
+
+@media screen and (max-width: 600px) {
+    .setting_page {
+        width: 100%;
+    }
+    
+    .search-filter {
+        flex-direction: column;
+        gap: 12px;
+    }
+}
