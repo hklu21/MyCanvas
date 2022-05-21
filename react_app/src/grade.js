@@ -1,56 +1,77 @@
 import React from 'react';
 import './course.css';
+import {AssignmentItem} from "./assignment";
 
-
-class AssignmentItem {
-    constructor(name, due, grade, outOf) {
-        this.name = name
-        this.due = due
-        this.grade = grade
-        this.outOf = outOf
-    }
-}
+//
+// class AssignmentItem {
+//     constructor(name, due, grade, outOf) {
+//         this.name = name
+//         this.due = due
+//         this.grade = grade
+//         this.outOf = outOf
+//     }
+// }
 
 class Grade extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            assignments: []
+            assignments: [],
+            updatingAssignmentItem: null  // an instance of AssignmentItem or null
         };
     }
 
     componentDidMount() {
-        //  fetch here
-        // this.setState({
-
-        // })
+        this.loadData()
     }
 
-    renderAddForm = () => {
-        return <form onSubmit={(e) => {
+    loadData = () => {
+        fetch("http://localhost:3000/assignment")
+            .then(res => res.json())
+            .then(
+                (result) => {
+                    this.setState({
+                        assignments: result.data.map((item) => new AssignmentItem(
+                            item.name,
+                            item.dueDate,
+                            item.grade,
+                            item.maxPoint,
+                            item.detail,
+                            item.rowid
+                        ))
+                    });
+                },
+                // (error) => {
+                //     this.setState({
+                //         isLoaded: true,
+                //         error
+                //     });
+                // }
+            )
+    }
+
+    renderUpdateGradeForm = () => {
+        let assignment = this.state.updatingAssignmentItem
+
+        return <form onSubmit={async (e) => {
             e.preventDefault()
 
-            let item = new AssignmentItem(
-                e.target.name.value,
-                e.target.due.value,
-                e.target.grade.value,
-                e.target.outOf.value,
-            )
-            this.setState((state) => {
-                let items = state.assignments
-                items.push(item)
-                return items
-            })
 
-            e.target.name.value = ""
-            e.target.due.value = ""
-            e.target.grade.value = ""
-            e.target.outOf.value = ""
+            // http put assignment
+
+            const requestOptions = {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ grade: e.target.grade.value })
+            };
+            await fetch('http://localhost:3000/assignment/' + String(assignment.id) + "/grade", requestOptions)
+                .then(response => response.json())
+
+            this.loadData()
         }}>
-            Name:<input type="text" name="name"/><br/>
-            Due:<input type="text" name="due"/><br/>
-            Grade:<input type="text" name="grade"/><br/>
-            Out Of:<input type="text" name="outOf"/><br/>
+            Assignment Name: {assignment.name}<br/>
+            Grade: <input type="text" name="grade"/><br/>
+            Maximum Points: {assignment.maxPoint}<br/>
             <button type="submit">Submit</button>
         </form>
     }
@@ -64,21 +85,30 @@ class Grade extends React.Component {
                     <th>Due</th>
                     <th>Grade</th>
                     <th>Out of</th>
-
+                    <th>Action</th>
                 </tr>
 
                 {this.state.assignments.map(assignment =>
                     <tr>
                         <td><a href="#">{assignment.name}</a></td>
-                        <td>{assignment.due}</td>
+                        <td>{assignment.dueDate}</td>
                         <td>{assignment.grade}</td>
-                        <td>{assignment.outOf}</td>
+                        <td>{assignment.maxPoint}</td>
+                        <td>
+                            {this.props.accountType === "Admin" &&
+                                <button onClick={() => {
+                                    this.setState({
+                                        updatingAssignmentItem: assignment
+                                    })
+                                }}>Update Grade</button>
+                            }
+                        </td>
                     </tr>
                 )}
             </table>
             <br/>
-            {this.props.accountType === "Admin" &&
-                this.renderAddForm()
+            {this.state.updatingAssignmentItem != null &&
+                this.renderUpdateGradeForm()
             }
         </section>
     }

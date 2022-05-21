@@ -1,12 +1,14 @@
 import React from 'react';
 import './assignment.css';
 
-class AssignmentItem {
-    constructor(name, dueDate, maxPoint, detail) {
+export class AssignmentItem {
+    constructor(name, dueDate, grade = null, maxPoint, detail, id = null) {
         this.name = name
         this.dueDate = dueDate
+        this.grade = grade
         this.maxPoint = maxPoint
         this.detail = detail
+        this.id = id
     }
 }
 
@@ -14,11 +16,7 @@ class Assignment extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            assignments: [
-                new AssignmentItem("Assignment 1", "Due on May 8th", "3 points", "Details of Assignment 1"),
-                new AssignmentItem("Assignment 2", "Due on May 8th", "3 points", "Details of Assignment 2"),
-                new AssignmentItem("Assignment 3", "Due on May 8th", "3 points", "Details of Assignment 3"),
-            ]
+            assignments: []
         }
     }
 
