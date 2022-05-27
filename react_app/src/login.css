@@ -30,7 +30,7 @@ font-family:sans-serif;
   align-items: center; 
   justify-content: center;
   width: 100%;
-  max-width: 25%;   
+  max-width: 40%;   
   flex: 1 1 auto;
   justify-content: flex-start;
   background: #363636;
@@ -132,15 +132,22 @@ button {
 @media screen and (max-width: 1800px) {
   
   #wrapper section {
-      max-width: 40%;
+      max-width: 50%;
   }    
 }
 
 @media screen and (max-width: 1350px) {
   
   #wrapper section {
-      max-width: 55%;
+      max-width: 60%;
   }    
+  form {
+    width: 90%;
+  }
+  
+  form#signup_form, #chpwd_form, #fgpwd_form{
+      width: 90%;
+  }
 }
 
 @media screen and (max-width: 1000px) {

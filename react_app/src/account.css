@@ -207,11 +207,14 @@ nav img{
     border-bottom: 1px solid black;
   }
 
-  @media screen and (max-width: 1800px) {
+  @media screen and (max-width: 1850px) {
     
     #wrapper section {
         max-width: 40%;
     }    
+    form input[type="text"], input[type="password"], section form p.edit, form button#edit_save, button#reset_pwd{
+        width: 50%;
+    }
 }
 
 @media screen and (max-width: 1350px) {
@@ -234,27 +237,54 @@ nav img{
     }    
 }
 
-@media screen and (max-width: 1500px) {
+@media screen and (max-width: 1550px) {
     form button#edit_save, button#reset_pwd {
         width: 40%;
     } 
-}
-
-@media screen and (max-width: 1200px) {
     form input[type="text"], input[type="password"], section form p.edit, form button#edit_save, button#reset_pwd{
         width: 60%;
+    }
+}
+
+@media screen and (max-width: 1250px) {
+    form input[type="text"], input[type="password"], section form p.edit, form button#edit_save, button#reset_pwd{
+        width: 70%;
     }
     
 }
 
-@media screen and (max-width: 800px) {
+@media screen and (max-width: 1050px) {
     form input[type="text"], input[type="password"], section form p.edit, form button#edit_save, button#reset_pwd{
         width: 80%;
     } 
 }
 
-@media screen and (max-width: 600px) {
+@media screen and (max-width: 950px) {
     form input[type="text"], input[type="password"], section form p.edit, form button#edit_save{
         width: 100%;
+    } 
+}
+
+@media screen and (max-width: 800px) {
+    form input[type="text"], input[type="password"],section form p.edit {
+        width: 125%;
+    } 
+}
+
+@media screen and (max-width: 600px) {
+    form input[type="text"], input[type="password"],section form p.edit {
+        width: 150%;
+    } 
+}
+
+@media screen and (max-width: 300px) {
+    form input[type="text"], input[type="password"],section form p.edit {
+        width: 175%;
+    } 
+}
+
+@media screen and (max-width: 400px) {
+    form input[type="text"], input[type="password"],section form p.edit {
+        width: 200%;
     } 
 }
