@@ -28,6 +28,7 @@ class ForgetPwdForm extends React.Component {
             ans_3: '',
             alert: ['', '', '', '', '', ''],
             alertShow: [false, false, false, false, false, false],
+            account_info: [],
         };
         this.handleEmailChange = this.handleEmailChange.bind(this);
         this.handlePwdChange1 = this.handlePwdChange1.bind(this);
@@ -40,6 +41,7 @@ class ForgetPwdForm extends React.Component {
 
     handleEmailChange(event) {
         this.setState({email: event.target.value});
+        this.loadData(event.target.value)
     }
 
     handlePwdChange1(event) {
@@ -62,28 +64,54 @@ class ForgetPwdForm extends React.Component {
         this.setState({ans_3: event.target.value});
     }
 
+    loadData = (id) => {
+        fetch('http://localhost:3000/account/' + String(id))
+            .then(res => res.json())
+            .then(
+                (result) => {
+                    this.setState({
+                        account_info: result.data
+                    });
+                }
+            )
+    }
+
+    postData = () => {
+        const data = {
+            email: this.state.email, 
+            password: this.state.pwd_1,
+        };
+        const requestOptions = {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data),
+        };
+        fetch('http://localhost:3000/change_pwd/' + String(this.state.email), requestOptions)
+            .then(res => res.json())
+    }
+
     clickConfirm(event) {
         if (this.state.email === "") {
             const newAlert = this.state.alert.slice();
             newAlert[0] = "Email is required."
             this.setState({alert: newAlert});
             this.setState({alertShow: [true, false, false, false, false, false]});
-        } else if (this.state.email !== "hengkuanlu@gmail.com") {
+        } else if (this.state.account_info.length === 0) {
             const newAlert = this.state.alert.slice();
             newAlert[0] = "Email not registered."
             this.setState({alert: newAlert});
             this.setState({alertShow: [true, false, false, false, false, false]});
-        } else if (this.state.ans_1 !== "ans1") {
+        } else if (this.state.ans_1 !== this.state.account_info[0]['security_question_answer_1']) {
             const newAlert = this.state.alert.slice();
             newAlert[1] = "Wrong answer."
             this.setState({alert: newAlert});
             this.setState({alertShow: [false, true, false, false, false, false]});
-        } else if (this.state.ans_2 !== "ans2") {
+        } else if (this.state.ans_2 !== this.state.account_info[0]['security_question_answer_2']) {
             const newAlert = this.state.alert.slice();
             newAlert[2] = "Wrong answer."
             this.setState({alert: newAlert});
             this.setState({alertShow: [false, false, true, false, false, false]});
-        } else if (this.state.ans_3 !== "ans3") {
+        } else if (this.state.ans_3 !== this.state.account_info[0]['security_question_answer_3']) {
             const newAlert = this.state.alert.slice();
             newAlert[3] = "Wrong answer."
             this.setState({alert: newAlert});
@@ -107,6 +135,7 @@ class ForgetPwdForm extends React.Component {
             this.setState({alert: newAlert});
             this.setState({alertShow: [false, false, false, false, false, true]});
         } else {
+            this.postData();
             this.setState({alertShow: [false, false, false, false, false, false]});
             this.props.submitResetPwd();
         }

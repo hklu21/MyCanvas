@@ -31,7 +31,7 @@ class SecurityQuestions extends React.Component {
         this.props.handleQuestion1(this.state.ans_1);
         this.props.handleQuestion2(this.state.ans_2);
         this.props.handleQuestion3(this.state.ans_3);
-        this.props.clickSave();
+        this.props.clickSave(this.state.ans_1, this.state.ans_2, this.state.ans_3);
         event.preventDefault();
     }
 
@@ -124,7 +124,7 @@ class ChangePwd extends React.Component {
         } else {
             this.setState({alertShow: [false, false, false]});
             this.props.handlePwdChange(this.state.pwd_2);
-            this.props.clickConfirm();
+            this.props.clickConfirm(this.state.pwd_2);
         }
         event.preventDefault();
     }
@@ -162,13 +162,14 @@ class Account extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            email: this.props.email,
+            account_id: this.props.account_id,
+            email: '',
             email_tmp: '',
-            ID: this.props.ID,
+            ID: '',
             ID_tmp: '',
-            name: this.props.name,
+            name: '',
             name_tmp: '',
-            pwd: this.props.pwd,
+            pwd: '',
             isEditing: false,
             isChangingPwd: false,
             isChangingSQ: false,
@@ -188,6 +189,31 @@ class Account extends React.Component {
         this.clickSave = this.clickSave.bind(this);
         this.clickChangePwd = this.clickChangePwd.bind(this);
         this.clickConfirm = this.clickConfirm.bind(this);
+    }
+
+    loadData = () => {
+        fetch('http://localhost:3000/account/rowid/' + String(this.state.account_id))
+            .then(res => res.json())
+            .then(
+                (result) => {
+                    this.setState({
+                        name: result.data[0]['name'],
+                        name_tmp: result.data[0]['name'],
+                        ID: result.data[0]['student_id'],
+                        ID_tmp: result.data[0]['student_id'],
+                        email: result.data[0]['email'],
+                        email_tmp: result.data[0]['email'],
+                        ans_1: result.data[0]['security_question_answer_1'],
+                        ans_2: result.data[0]['security_question_answer_2'],
+                        ans_3: result.data[0]['security_question_answer_3'],
+                        pwd: result.data[0]['password']
+                    });
+                }
+            )
+    }
+
+    componentWillMount() {
+        this.loadData()
     }
 
 
@@ -219,12 +245,59 @@ class Account extends React.Component {
         this.setState({pwd: pwd})
     }
 
+    postProfile = () => {
+        const data = {
+            account_id: this.state.account_id,
+            email: this.state.email_tmp,
+            student_id: this.state.ID_tmp,
+            name: this.state.name_tmp,
+        };
+        const requestOptions = {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data),
+        };
+        fetch('http://localhost:3000/profile/' + String(this.state.account_id), requestOptions)
+            .then(res => res.json())
+    }
+
+    postQuestionAnswers = (ans_1, ans_2, ans_3) => {
+        const data = {
+            account_id: this.state.account_id,
+            ans_1: ans_1,
+            ans_2: ans_2,
+            ans_3: ans_3,
+        };
+        const requestOptions = {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data),
+        };
+        fetch('http://localhost:3000/profile/security_questions/' + String(this.state.account_id), requestOptions)
+            .then(res => res.json())
+    }
+
+    postPassword = (pwd) => {
+        const data = {
+            account_id: this.state.account_id,
+            password: pwd,
+        };
+        const requestOptions = {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data),
+        };
+        fetch('http://localhost:3000/profile/password/' + String(this.state.account_id), requestOptions)
+            .then(res => res.json())
+    }
+
 
     clickEditSave(event) {
         if (this.state.isEditing){
             this.setState({name: this.state.name_tmp});
             this.setState({email: this.state.email_tmp});
             this.setState({ID: this.state.ID_tmp});
+            this.postProfile();
         }
         this.setState({isEditing: !this.state.isEditing});
         event.preventDefault();
@@ -235,8 +308,12 @@ class Account extends React.Component {
         event.preventDefault();
     }
 
-    clickSave() {
+    clickSave(ans_1, ans_2, ans_3) {
         this.setState({isChangingSQ: false});
+        this.setState({ans_1: ans_1});
+        this.setState({ans_2: ans_2});
+        this.setState({ans_3: ans_3});
+        this.postQuestionAnswers(ans_1, ans_2, ans_3);
     }
 
     clickChangePwd(event) {
@@ -244,8 +321,10 @@ class Account extends React.Component {
         event.preventDefault();
     }
 
-    clickConfirm() {
+    clickConfirm(pwd) {
         this.setState({isChangingPwd: false});
+        this.setState({pwd: pwd});
+        this.postPassword(pwd);
     }
 
 

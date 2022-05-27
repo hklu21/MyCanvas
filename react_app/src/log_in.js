@@ -25,6 +25,7 @@ class LogInForm extends React.Component {
             pwd: '',
             alert: ['', '', ''],
             alertShow: [false, false, false],
+            account_info: [],
         };
         this.handleUserNameChange = this.handleUserNameChange.bind(this);
         this.handlePwdChange = this.handlePwdChange.bind(this);
@@ -36,6 +37,7 @@ class LogInForm extends React.Component {
 
     handleUserNameChange(event) {
         this.setState({username: event.target.value});
+        this.loadData(event.target.value)
     }
 
     handlePwdChange(event) {
@@ -54,52 +56,76 @@ class LogInForm extends React.Component {
         this.props.toResetPwd();
         event.preventDefault();
     }
+
+    loadData = (id) => {
+        fetch('http://localhost:3000/account/' + String(id))
+            .then(res => res.json())
+            .then(
+                (result) => {
+                    this.setState({
+                        account_info: result.data
+                    });
+                }
+            )
+    }
+
     clickLogIn(event) {
         if (this.state.username === "") {
             const newAlert = this.state.alert.slice();
             newAlert[0] = "Username is required."
             this.setState({alert: newAlert});
             this.setState({alertShow: [true, false, false]});
-        } else if (this.state.username !== "hengkuanlu@gmail.com") {
-            // to do: username not exists
-            const newAlert = this.state.alert.slice();
-            newAlert[0] = "Username not exists."
-            this.setState({alert: newAlert});
-            this.setState({alertShow: [true, false, false]});
-        } else if (this.state.pwd === "") {
-            const newAlert = this.state.alert.slice();
-            newAlert[1] = "Password is required."
-            this.setState({alert: newAlert});
-            this.setState({alertShow: [false, true, false]});
-        } else if (this.state.pwd !== "asd1!") {
-            // to do: wrong pwd
-            const newAlert = this.state.alert.slice();
-            newAlert[1] = "Password not correct."
-            this.setState({alert: newAlert});
-            this.setState({alertShow: [false, true, false]});
-        } else if (this.state.accountType === "") {
-            const newAlert = this.state.alert.slice();
-            newAlert[2] = "Please select account type."
-            this.setState({alert: newAlert});
-            this.setState({alertShow: [false, false, true]});
-        }
-        /*
-            else if (type not match) {
-            const newAlert = this.state.alert.slice();
-            newAlert[2] = "Accout type not match."
-            this.setState({alert: newAlert});
-            this.setState({alertShow: [false, false, true]});
-        } else if (not admin and not active) {
-            const newAlert = this.state.alert.slice();
-            newAlert[0] = "Accout not active."
-            this.setState({alert: newAlert});
-            this.setState({alertShow: [true, false, false]});
-        }
-        */
-        else {
-            this.setState({alertShow: [false, false, false]});
-            this.props.clickLogIn(this.state.username, this.state.accountType);
-        }
+        } else {
+            if (this.state.account_info.length === 0) {
+                const newAlert = this.state.alert.slice();
+                newAlert[0] = "Username not exists."
+                this.setState({alert: newAlert});
+                this.setState({alertShow: [true, false, false]});
+            } else if (this.state.pwd === "") {
+                const newAlert = this.state.alert.slice();
+                newAlert[1] = "Password is required."
+                this.setState({alert: newAlert});
+                this.setState({alertShow: [false, true, false]});
+            } else if (this.state.pwd !== this.state.account_info[0]['password']) {
+                const newAlert = this.state.alert.slice();
+                newAlert[1] = "Password not correct."
+                this.setState({alert: newAlert});
+                this.setState({alertShow: [false, true, false]});
+            } else if (this.state.accountType === "") {
+                const newAlert = this.state.alert.slice();
+                newAlert[2] = "Please select account type."
+                this.setState({alert: newAlert});
+                this.setState({alertShow: [false, false, true]});
+            } else {
+                if (this.state.accountType === 'Admin') {
+                    // admin is always active
+                    if (this.state.account_info[0]['account_type'] !== 'Admin') {
+                        const newAlert = this.state.alert.slice();
+                        newAlert[2] = "Accout type not match."
+                        this.setState({alert: newAlert});
+                        this.setState({alertShow: [false, false, true]});
+                    } else {
+                        this.setState({alertShow: [false, false, false]});
+                        this.props.clickLogIn(this.state.username, this.state.accountType);
+                    }
+                } else if (this.state.accountType === 'User') {
+                    if (this.state.account_info[0]['account_type'] === 'Admin') {
+                        const newAlert = this.state.alert.slice();
+                        newAlert[2] = "Accout type not match."
+                        this.setState({alert: newAlert});
+                        this.setState({alertShow: [false, false, true]});
+                    } else if (this.state.account_info[0]['activity'] === 0) {
+                        const newAlert = this.state.alert.slice();
+                        newAlert[0] = "Accout not active."
+                        this.setState({alert: newAlert});
+                        this.setState({alertShow: [true, false, false]});
+                    } else {
+                        this.setState({alertShow: [false, false, false]});
+                        this.props.clickLogIn(this.state.account_info[0]['rowid'], this.state.accountType);
+                    }
+                }
+            }
+        } 
         event.preventDefault();
     }
 

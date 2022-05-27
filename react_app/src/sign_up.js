@@ -30,6 +30,8 @@ class SignUpForm extends React.Component {
             ans_3: '',
             alert: ['', '', '', '', '', '', '' ,''],
             alertShow: [false, false, false, false, false, false, false, false],
+            account_info: [],
+            id_info: [],
         };
         this.handleNameChange = this.handleNameChange.bind(this);
         this.handleEmailChange = this.handleEmailChange.bind(this);
@@ -49,10 +51,12 @@ class SignUpForm extends React.Component {
 
     handleEmailChange(event) {
         this.setState({email: event.target.value});
+        this.loadDataEmial(event.target.value)
     }
 
     handleIDChange(event) {
         this.setState({ID: event.target.value});
+        this.loadDataID(event.target.value)
     }
 
     handlePwdChange1(event) {
@@ -79,6 +83,53 @@ class SignUpForm extends React.Component {
         this.setState({ans_3: event.target.value});
     }
 
+    loadDataEmial = (email) => {
+        fetch('http://localhost:3000/account/' + String(email))
+            .then(res => res.json())
+            .then(
+                (result) => {
+                    this.setState({
+                        account_info: result.data
+                    });
+                }
+            )
+    }
+
+    loadDataID = (id) => {
+        fetch('http://localhost:3000/account/id/' + String(id))
+            .then(res => res.json())
+            .then(
+                (result) => {
+                    this.setState({
+                        id_info: result.data
+                    });
+                }
+            )
+    }
+
+    postData = () => {
+        const data = {
+            email: this.state.email,
+            student_id: this.state.ID,
+            password: this.state.pwd_1,
+            ans_1: this.state.ans_1,
+            ans_2: this.state.ans_2,
+            ans_3: this.state.ans_3,
+            activity: "0",
+            account_type: this.state.accountType,
+        };
+        if (this.state.name !== "") {
+            data['name'] = this.state.name;
+        }
+        const requestOptions = {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data),
+        };
+        fetch('http://localhost:3000/account/created', requestOptions)
+            .then(res => res.json())
+    }
+
     /* check whether the input email is in valid form */
     validateEmail(email) {
         return String(email)
@@ -99,7 +150,7 @@ class SignUpForm extends React.Component {
             newAlert[0] = "Invalid email."
             this.setState({alert: newAlert});
             this.setState({alertShow: [true, false, false, false, false, false, false, false]});
-        } else if (this.state.email === "hengkuanlu@gmail.com") {
+        } else if (this.state.account_info.length !== 0) {
             const newAlert = this.state.alert.slice();
             newAlert[0] = "Email already registered."
             this.setState({alert: newAlert});
@@ -109,7 +160,7 @@ class SignUpForm extends React.Component {
             newAlert[1] = "Student ID is required."
             this.setState({alert: newAlert});
             this.setState({alertShow: [false, true, false, false, false, false, false, false]});
-        } else if (this.state.ID === "hklu21") {
+        } else if (this.state.id_info.length !== 0) {
             const newAlert = this.state.alert.slice();
             newAlert[1] = "Student ID already registered."
             this.setState({alert: newAlert});
@@ -153,6 +204,7 @@ class SignUpForm extends React.Component {
             this.setState({alert: newAlert});
             this.setState({alertShow: [false, false, false, false, false, false, false, true]});
         } else {
+            this.postData();
             this.setState({alertShow: [false, false, false, false, false, false, false, false]});
             this.props.submitSignUp();
         }
@@ -185,7 +237,7 @@ class SignUpForm extends React.Component {
                 <AlertMsg alert_msg={this.state.alert[2]} alertShow={this.state.alertShow[2]}/>
                 <div className="input-wrapper">
                     <input type="password" name="password" id="password" 
-                        placeholder="*Password(5 chars in length, at least 1 number and 1 symbol)"
+                        placeholder="*Password(5 chars, at least 1 number and 1 symbol)"
                         onChange={this.handlePwdChange1}
                     />
                 </div>
@@ -201,8 +253,8 @@ class SignUpForm extends React.Component {
                 <AlertMsg alert_msg={this.state.alert[4]} alertShow={this.state.alertShow[4]}/>
                 <select className="input-wrapper" name="type" id="type" onChange={this.handleAccountType} defaultValue="Accout Type">
                     <option disabled>Accout Type</option>
-                    <option value="student">Student</option>
-                    <option value="teacher">Teacher</option>
+                    <option value="Student">Student</option>
+                    <option value="Teacher">Teacher</option>
                 </select>
                 
                 <div className="input-wrapper">

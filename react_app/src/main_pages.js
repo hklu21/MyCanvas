@@ -29,10 +29,11 @@ class MainPages extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            account_id: this.props.account_id,
             page: "DashBoard",
             pageShow: [true, false, false, false],
             name: 'Name',
-            email: this.props.email,
+            email: '',
             ID: 'Student ID',
             accountType: this.props.accountType,
             userType: '',
@@ -101,9 +102,7 @@ class MainPages extends React.Component {
                             clickCourse={this.clickCourse} clickDashBoard={this.clickDashBoard}
                             clickSetting={this.clickSetting} clickLogOut={this.clickLogOut}
                         />
-                        <Account email={this.props.email} ID={this.state.ID} name={this.state.name}
-                            pwd={this.state.pwd}
-                        />
+                        <Account account_id={this.props.account_id}/>
                     </div>
                 );
             case "DashBoard":
