@@ -121,7 +121,7 @@ class MainPages extends React.Component {
                             clickCourse={this.clickCourse} clickDashBoard={this.clickDashBoard}
                             clickSetting={this.clickSetting} clickLogOut={this.clickLogOut}
                         />
-                        <Course account_id={this.props.account_id} accountType={this.state.accountType}/>
+                        <Course accountID={this.props.account_id} accountType={this.state.accountType}/>
                     </div>
                 );
             case "Setting":

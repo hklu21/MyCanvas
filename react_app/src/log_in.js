@@ -106,7 +106,7 @@ class LogInForm extends React.Component {
                         this.setState({alertShow: [false, false, true]});
                     } else {
                         this.setState({alertShow: [false, false, false]});
-                        this.props.clickLogIn(this.state.username, this.state.accountType);
+                        this.props.clickLogIn(this.state.account_info[0]['rowid'], this.state.accountType);
                     }
                 } else if (this.state.accountType === 'User') {
                     if (this.state.account_info[0]['account_type'] === 'Admin') {
