@@ -26,7 +26,8 @@ class Grade extends React.Component {
     }
 
     loadData = () => {
-        fetch("http://localhost:3000/assignment")
+        // fetch("http://localhost:3000/assignment")
+        fetch(`http://localhost:3000/courses/${this.props.activeCourse}/assignments?rowid=${this.props.accountID}`) 
             .then(res => res.json())
             .then(
                 (result) => {
@@ -34,9 +35,8 @@ class Grade extends React.Component {
                         assignments: result.data.map((item) => new AssignmentItem(
                             item.name,
                             item.dueDate,
-                            item.grade,
                             item.maxPoint,
-                            item.detail,
+                            item.details,
                             item.rowid
                         ))
                     });

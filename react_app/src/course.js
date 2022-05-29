@@ -46,11 +46,11 @@ class Course extends React.Component {
                 currentTab = <Announcement activeCourse={this.state.activeCourse} accountType={this.props.accountType}/>
                 break
             case 1:
-                currentTab = <Grade activeCourse={this.state.activeCourse} accountType={this.props.accountType}/>
+                currentTab = <Grade accountID={this.props.accountID} activeCourse={this.state.activeCourse} accountType={this.props.accountType}/>
                 break
             default:
                 // currentTab = <>Coming soon!</>
-                currentTab = <Assignment activeCourse={this.state.activeCourse} accountType={this.props.accountType}/>
+                currentTab = <Assignment accountID={this.props.accountID} activeCourse={this.state.activeCourse} accountType={this.props.accountType}/>
         }
 
         return <section id="course">

@@ -1,0 +1,57 @@
+body{
+    font-family: 'Poppins',sans-serif;
+    padding: 10px;
+}    
+
+textarea {
+    width: 100%;
+}
+
+.assignment_detail_page{
+    margin-left: auto;
+    margin-right: auto;
+    width: 75%;
+}
+
+#assign_info_detail {
+    display: flex;
+    gap: 20px;
+}
+
+div #assign_detail_description {
+    margin-block-start: 5px;
+    font-size: 14px;
+}
+
+#assign_info_title {
+    font-size: 20px;
+    margin-block-start: 20px;
+    margin-block-end: 5px;
+}
+
+#assign_info_date {
+    margin-block-start: 5px;
+    font-size: 13px;
+}
+
+#assign_info_points {
+    margin-block-start: 5px;
+    font-size: 13px;
+}
+
+input[type=submit] {
+    background-color: #800000;
+    border: none;
+    color: white;
+    padding: 15px;
+    text-decoration: none;
+    margin: 4px 0px;
+    cursor: pointer;
+}
+
+@media screen and (max-width: 600px) {
+    #assign_answer, input[type=submit] {
+      width: 100%;
+      margin-top: 0;
+    }
+}
