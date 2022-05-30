@@ -19,6 +19,10 @@ class Setting extends React.Component {
     constructor(props){
         super(props)
         this.state = {
+            selectedCourses: [],
+            userAlreadyRegisteredCourses: [],
+            courses: [],
+            newCoursesToSelect: [],
             allUsers: [],
             filteredUsers: [],
             showUsers: [],
@@ -32,6 +36,7 @@ class Setting extends React.Component {
         this.showModal = this.showModal.bind(this);
         this.hideModal = this.hideModal.bind(this);
         this.handleStatusChange = this.handleStatusChange.bind(this);
+        this.handleCourseChange = this.handleCourseChange.bind(this);
 
         this.filterUser = this.filterUser.bind(this);
         this.searchUser = this.searchUser.bind(this);
@@ -73,13 +78,62 @@ class Setting extends React.Component {
                     });
                 }
             )
+
+        fetch(`http://localhost:3000/courses`) 
+            .then(res => res.json())
+            .then(
+                (result) => {
+                    // console.log(result.data)
+                    this.setState({
+                        courses: result.data.map((item) => item.course_id)
+                    });
+                },
+                // Note: it's important to handle errors here
+                // instead of a catch() block so that we don't swallow
+                // exceptions from actual bugs in components.
+                (error) => {
+                    this.setState({
+                        isLoaded: true,
+                        error
+                    });
+                }
+            )
     }
     
 
     showModal = user => () => {
         this.setState({ 
             show: true,
-            editUser: user
+            editUser: user,
+            selectedCourses: [],
+            newCoursesToSelect: []
+        }, () => {
+            fetch(`http://localhost:3000/users/${this.state.editUser.rowid}/courses`) 
+                .then(res => res.json())
+                .then(
+                    (result) => {
+                        // console.log(result.data)
+                        this.setState({
+                            userAlreadyRegisteredCourses: result.data.map((item) => item.course_id) // Courses that the edit user already taken
+                        }, () => {
+                            
+                            var newCourses;
+                            newCourses = this.state.courses.filter(course => !(this.state.userAlreadyRegisteredCourses.includes(course)))
+                            this.setState({newCoursesToSelect: newCourses}, () => {
+                                console.log("new courses to select:", this.state.newCoursesToSelect)
+                            }) // New courses for edit user to select  (Courses - Already Taken Courses)
+                        });
+                    },
+                    // Note: it's important to handle errors here
+                    // instead of a catch() block so that we don't swallow
+                    // exceptions from actual bugs in components.
+                    (error) => {
+                        this.setState({
+                            isLoaded: true,
+                            error
+                        });
+                    }
+                )
         });
     };
 
@@ -88,7 +142,7 @@ class Setting extends React.Component {
     };
 
     saveModal = () => {
-        this.setState({ show: false });
+        this.setState({ show: false});
 
         var newUserData = {
             'rowid': this.state.editUser.rowid,
@@ -126,7 +180,39 @@ class Setting extends React.Component {
                 this.setState({showUsers: this.state.allUsers});
             }         
         });
+
+
+        // Add user to courses
+        var newUserCoursesData = {
+            'rowid': this.state.editUser.rowid,
+            'selectedCourses': this.state.selectedCourses
+        }
+
+        fetch(`http://localhost:3000/users/courses/`, {  
+            method: 'POST', 
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(newUserCoursesData)  
+        })
     };
+
+    handleCourseChange = (e) => {
+        // e.preventDefault();
+
+        var newSelectedCourses;
+        if (e.target.checked) {
+            // checked, add a new course
+            newSelectedCourses = this.state.selectedCourses;
+            newSelectedCourses.push(e.target.value);
+            this.setState({selectedCourses: newSelectedCourses}, () => {console.log("selected", this.state.selectedCourses);});
+        } else {
+
+            // unchecked, delete a course
+            newSelectedCourses = this.state.selectedCourses.filter((item) => item !== e.target.value);
+            this.setState({selectedCourses: newSelectedCourses}, () => {console.log("selected", this.state.selectedCourses);});
+        
+        }
+    
+    }
 
     handleStatusChange = (e) => {
         e.preventDefault();
@@ -135,7 +221,7 @@ class Setting extends React.Component {
         } else if (e.target.value === 'inactive'){
             this.setState({editUserNewStatus: 0});
         }
-        // e.target.reset();
+        // e.reset();
     }
 
     // Function to filter user when click buttons
@@ -230,11 +316,28 @@ class Setting extends React.Component {
                 <Modal show={this.state.show} handleClose={this.hideModal} handleSave={this.saveModal}>
                     <p>Name: {this.state.editUser.name}</p>
                     <p>Email: {this.state.editUser.email}</p>
+                    <br/>
                     <p>Status: </p>
+                    
                     <select name="status" id="user-status" onChange={this.handleStatusChange}>
                         <option value="active">Active</option>
                         <option value="inactive">Inactive</option>
                     </select>
+
+                    <br/><br/>
+                    <p>Add to Courses: </p>
+                    
+                    {this.state.newCoursesToSelect.map(( course, index )  => {
+                        return ( 
+                            <>
+                                <input type="checkbox" value={course} id={course} name={course} key={index} onChange={this.handleCourseChange}/>
+                                <label for={course}>{course}</label>
+                                <br/>
+                            </>
+                        );
+                    })
+                    }
+                                
                 </Modal>
             </div>
         </>
