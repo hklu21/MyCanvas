@@ -31,7 +31,7 @@ class Assignment extends React.Component {
             .then(res => res.json())
             .then(
                 (result) => {
-                    console.log(result.data)
+                    // console.log(result.data)
                     this.setState({
                         assignments: result.data.map((item) => new AssignmentItem(
                             item.name,
@@ -76,7 +76,7 @@ class Assignment extends React.Component {
                         // 'course_id': this.props.activeCourse
                     }
 
-                    console.log(newAssignemntData['name']);
+                    // console.log(newAssignemntData['name']);
 
                     fetch(`http://localhost:3000/courses/${this.props.activeCourse}/assignments`, {  // Enter your IP address here
                         method: 'POST', 
