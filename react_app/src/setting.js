@@ -69,6 +69,7 @@ class Setting extends React.Component {
                     });
                 }
             )
+            console.log(this.state.allUsers);
     }
 
 

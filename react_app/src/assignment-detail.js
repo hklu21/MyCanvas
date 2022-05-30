@@ -28,7 +28,6 @@ class AssignmentDetail extends React.Component {
                         assignment: new AssignmentItem(
                             result.data[0].name,
                             result.data[0].dueDate,
-                            result.data[0].grade,
                             result.data[0].maxPoint,
                             result.data[0].details,
                             result.data[0].rowid
@@ -82,7 +81,9 @@ class AssignmentDetail extends React.Component {
                     
                     <hr/>
 
-                    <div className="assign_submit">
+                    {this.props.accountType === "Student" && 
+                    <>
+                        <div className="assign_submit">
                         <p className="title">Submit</p>
                         <form onSubmit={(e) => {
                             e.preventDefault()
@@ -105,6 +106,9 @@ class AssignmentDetail extends React.Component {
                             <input type="submit" value="Submit Assignment"/>
                         </form>
                     </div>
+                    </>
+                    }
+                    
                 </div>
 
                 <br/>

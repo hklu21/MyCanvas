@@ -47,8 +47,8 @@ class Assignment extends React.Component {
                 // exceptions from actual bugs in components.
                 (error) => {
                     this.setState({
-                    isLoaded: true,
-                    error
+                        isLoaded: true,
+                        error
                     });
                 }
             )
@@ -62,29 +62,53 @@ class Assignment extends React.Component {
                 <form onSubmit={(e) => {
                     e.preventDefault()
 
-                    let item = new AssignmentItem(e.target.assign_name.value, e.target.assign_due.value, e.target.assign_point.value, e.target.assign_detail.value, null)
-                    this.setState((state) => {
-                        state.newAssignment = item
-                        return item
-                    })
+                    // Get the last rowid before creating a new assignment (since we are not having an additional assignmentID except for rowid)
+                    fetch(`http://localhost:3000/assignments`) 
+                        .then(res => res.json())
+                        .then(
+                            (result) => {
+                                var lastAssignmentID = result.data.length;
+                                // console.log(result.data);
+                                console.log("lastassID", lastAssignmentID);
 
-                    var newAssignemntData = {
-                        'name': this.state.newAssignment.name,
-                        'dueDate': this.state.newAssignment.dueDate,
-                        'maxPoint': this.state.newAssignment.maxPoint,
-                        'details': this.state.newAssignment.details,
-                        // 'course_id': this.props.activeCourse
-                    }
+                                let item = new AssignmentItem(e.target.assign_name.value, e.target.assign_due.value, e.target.assign_point.value, e.target.assign_detail.value, lastAssignmentID+1)
+                                this.setState(prevState => ({
+                                    assignments: [...prevState.assignments, item],
+                                    newAssignment: item
+                                }), () => {
+                                    // console.log(this.state.assignments)
+                                    var newAssignemntData = {
+                                        'name': this.state.newAssignment.name,
+                                        'dueDate': this.state.newAssignment.dueDate,
+                                        'maxPoint': this.state.newAssignment.maxPoint,
+                                        'details': this.state.newAssignment.details,
+                                        // 'course_id': this.props.activeCourse
+                                    }
+                
+                                    fetch(`http://localhost:3000/courses/${this.props.activeCourse}/assignments`, {  // Enter your IP address here
+                                        method: 'POST', 
+                                        headers: { 'Content-Type': 'application/json' },
+                                        body: JSON.stringify(newAssignemntData) // body data type must match "Content-Type" header
+                                    })
+                                    console.log('posting...')
+                
+                                    e.target.reset()
+                                })
+                                
+                               
+                            },
+                            // Note: it's important to handle errors here
+                            // instead of a catch() block so that we don't swallow
+                            // exceptions from actual bugs in components.
+                            (error) => {
+                                this.setState({
+                                    isLoaded: true,
+                                    error
+                                });
+                            }
+                        )
 
-                    // console.log(newAssignemntData['name']);
-
-                    fetch(`http://localhost:3000/courses/${this.props.activeCourse}/assignments`, {  // Enter your IP address here
-                        method: 'POST', 
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(newAssignemntData) // body data type must match "Content-Type" header
-                    })
-
-                    e.target.reset()
+                   
                 }}>
                     <label htmlFor="assign_name">Assignment Title:</label>
                     <input type="text" id="assign_name" name="assign_name" size="50"/><br/><br/>
@@ -111,7 +135,7 @@ class Assignment extends React.Component {
         if (this.state.showAssignmentDetail) {
             return (
                 <>
-                    <AssignmentDetail accountID={this.props.accountID} activeCourse={this.props.activeCourse} assignmentID={this.state.assignmentDetailId}/>
+                    <AssignmentDetail accountType={this.props.accountType} accountID={this.props.accountID} activeCourse={this.props.activeCourse} assignmentID={this.state.assignmentDetailId}/>
                 </>
             )
         }
