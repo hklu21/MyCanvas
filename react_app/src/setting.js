@@ -21,8 +21,10 @@ class Setting extends React.Component {
         this.state = {
             allUsers: [],
             filteredUsers: [],
+            showUsers: [],
+            filtering: false,
             searchQuery: "",
-            show: false,
+            show: false, // show the Modal
             editUserNewStatus: 1,
             editUser: new UserItem("", "", "", 1)
         }
@@ -51,12 +53,14 @@ class Setting extends React.Component {
                             item.activity,
                             item.rowid
                         )),
-                        filteredUsers: result.data.map((item) => new UserItem(
-                            item.name,
-                            item.email,
-                            item.activity,
-                            item.rowid
-                        ))
+                        // filteredUsers: result.data.map((item) => new UserItem(
+                        //     item.name,
+                        //     item.email,
+                        //     item.activity,
+                        //     item.rowid
+                        // ))
+                    }, () => {
+                        this.setState({filteredUsers: this.state.allUsers, showUsers: this.state.allUsers})
                     });
                 },
                 // Note: it's important to handle errors here
@@ -69,9 +73,8 @@ class Setting extends React.Component {
                     });
                 }
             )
-            console.log(this.state.allUsers);
     }
-
+    
 
     showModal = user => () => {
         this.setState({ 
@@ -92,12 +95,37 @@ class Setting extends React.Component {
             'status': this.state.editUserNewStatus
         }
 
-        fetch(`http://localhost:3000/users/${this.state.editUser.rowid}`, {  // Enter your IP address here
+        fetch(`http://localhost:3000/users/${this.state.editUser.rowid}`, {  
             method: 'POST', 
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(newUserData) // body data type must match "Content-Type" header
+            body: JSON.stringify(newUserData)  
         })
         // window.location.reload();
+
+        // modify that user's data in state.allUsers and state.filteredUsers
+        // https://levelup.gitconnected.com/using-the-map-function-in-javascript-react-b433736759d4
+        let newAllUsers = this.state.allUsers.map(user => {
+            if (user.rowid === this.state.editUser.rowid) {
+                return {
+                    ...user,
+                    status: this.state.editUserNewStatus === 1 ? "active" : "inactive"
+                }
+            }
+            return user
+        })
+        this.setState({allUsers: newAllUsers}, () => {
+            if (this.state.filtering) {
+                this.setState({showUsers: this.state.filteredUsers});
+            }
+        });
+
+        let newFilteredUsers = this.state.filteredUsers.filter(user => !(user.rowid === this.state.editUser.rowid && user.status !== (this.state.editUserNewStatus === 1 ? "active": "inactive")))
+        
+        this.setState({filteredUsers: newFilteredUsers}, () => {
+            if (!this.state.filtering) {
+                this.setState({showUsers: this.state.allUsers});
+            }         
+        });
     };
 
     handleStatusChange = (e) => {
@@ -107,25 +135,21 @@ class Setting extends React.Component {
         } else if (e.target.value === 'inactive'){
             this.setState({editUserNewStatus: 0});
         }
-        // this.setState(prevState => ({
-        //     editUser: {                   // object that we want to update
-        //         ...prevState.editUser,    // keep all other key-value pairs
-        //         status: newstatus      // update the value of specific key
-        //     }
-        // }))
+        // e.target.reset();
     }
 
     // Function to filter user when click buttons
     filterUser = status => (e) => {
         e.preventDefault();
         if (status === "all") {
-            this.setState({filteredUsers: this.state.allUsers})
+            this.setState({showUsers: this.state.allUsers, filtering: false})
         } else {
             this.setState({filteredUsers: this.state.allUsers.filter(
                 u => {
                     return u.status === status
                 }
-            )})
+            )}, () => { this.setState({showUsers: this.state.filteredUsers, filtering: true})})
+           
         } 
     }
 
@@ -144,6 +168,7 @@ class Setting extends React.Component {
             }
         ), searchQuery : ""
         })
+        this.setState({showUsers: this.state.filteredUsers})
     }
 
 
@@ -181,7 +206,7 @@ class Setting extends React.Component {
                         </thead>
 
                         <tbody>
-                            {this.state.filteredUsers.map(( user, index )  => {
+                            {this.state.showUsers.map(( user, index )  => {
                                 return ( 
                                     <tr key={index}>
                                         <td>{user.name}
@@ -206,7 +231,7 @@ class Setting extends React.Component {
                     <p>Name: {this.state.editUser.name}</p>
                     <p>Email: {this.state.editUser.email}</p>
                     <p>Status: </p>
-                    <select name="status" id="user-status" onChange={this.handleStatusChange} >
+                    <select name="status" id="user-status" onChange={this.handleStatusChange}>
                         <option value="active">Active</option>
                         <option value="inactive">Inactive</option>
                     </select>

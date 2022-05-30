@@ -99,7 +99,7 @@ class AssignmentDetail extends React.Component {
                                 body: JSON.stringify(assignmentAnswerData) // body data type must match "Content-Type" header
                             })
 
-                            e.target.reset()
+                            e.reset()
                             
                         }}>
                             <textarea id="assign_answer" rows="10"></textarea><br/><br/>
