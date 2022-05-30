@@ -2,10 +2,16 @@ import React from 'react';
 import './setting.css';
 
 class UserItem {
-    constructor(name, email, status) {
+    constructor(name, email, status, rowid) {
         this.name = name 
         this.email = email
-        this.status= status
+        if (status === 1){
+            this.status= 'active'
+        } else {
+            this.status= 'inactive'
+        }
+        this.rowid = rowid
+        
     }
 }
 
@@ -13,27 +19,58 @@ class Setting extends React.Component {
     constructor(props){
         super(props)
         this.state = {
-            allUsers: [
-                new UserItem("fake-student1", "fake1@uchicago.edu", "active"),
-                new UserItem("fake-student2", "fake2@uchicago.edu", "active"),
-                new UserItem("fake-student3", "fake3@uchicago.edu", "inactive"),
-            ],
-            filteredUsers: [
-                new UserItem("fake-student1", "fake1@uchicago.edu", "active"),
-                new UserItem("fake-student2", "fake2@uchicago.edu", "active"),
-                new UserItem("fake-student3", "fake3@uchicago.edu", "inactive"),
-            ],
+            allUsers: [],
+            filteredUsers: [],
             searchQuery: "",
             show: false,
-            editUser: new UserItem("fake-student1", "fake1@uchicago.edu", "active")
+            editUserNewStatus: 1,
+            editUser: new UserItem("", "", "", 1)
         }
 
         this.showModal = this.showModal.bind(this);
         this.hideModal = this.hideModal.bind(this);
+        this.handleStatusChange = this.handleStatusChange.bind(this);
 
         this.filterUser = this.filterUser.bind(this);
         this.searchUser = this.searchUser.bind(this);
     }
+
+    componentDidMount() {
+        // Fetch all Users
+        // console.log("account type: ", this.props.accountType);
+        // console.log("account id: ", this.props.accountID);
+        fetch(`http://localhost:3000/users`) 
+            .then(res => res.json())
+            .then(
+                (result) => {
+                    // console.log(result.data)
+                    this.setState({
+                        allUsers: result.data.map((item) => new UserItem(
+                            item.name,
+                            item.email,
+                            item.activity,
+                            item.rowid
+                        )),
+                        filteredUsers: result.data.map((item) => new UserItem(
+                            item.name,
+                            item.email,
+                            item.activity,
+                            item.rowid
+                        ))
+                    });
+                },
+                // Note: it's important to handle errors here
+                // instead of a catch() block so that we don't swallow
+                // exceptions from actual bugs in components.
+                (error) => {
+                    this.setState({
+                        isLoaded: true,
+                        error
+                    });
+                }
+            )
+    }
+
 
     showModal = user => () => {
         this.setState({ 
@@ -48,18 +85,44 @@ class Setting extends React.Component {
 
     saveModal = () => {
         this.setState({ show: false });
+
+        var newUserData = {
+            'rowid': this.state.editUser.rowid,
+            'status': this.state.editUserNewStatus
+        }
+
+        fetch(`http://localhost:3000/users/${this.state.editUser.rowid}`, {  // Enter your IP address here
+            method: 'POST', 
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(newUserData) // body data type must match "Content-Type" header
+        })
+        // window.location.reload();
     };
 
+    handleStatusChange = (e) => {
+        e.preventDefault();
+        if (e.target.value === 'active') {
+            this.setState({editUserNewStatus: 1});
+        } else if (e.target.value === 'inactive'){
+            this.setState({editUserNewStatus: 0});
+        }
+        // this.setState(prevState => ({
+        //     editUser: {                   // object that we want to update
+        //         ...prevState.editUser,    // keep all other key-value pairs
+        //         status: newstatus      // update the value of specific key
+        //     }
+        // }))
+    }
 
     // Function to filter user when click buttons
     filterUser = status => (e) => {
         e.preventDefault();
-        if (status == "all") {
+        if (status === "all") {
             this.setState({filteredUsers: this.state.allUsers})
         } else {
             this.setState({filteredUsers: this.state.allUsers.filter(
                 u => {
-                    return u.status == status
+                    return u.status === status
                 }
             )})
         } 
@@ -76,7 +139,7 @@ class Setting extends React.Component {
         e.preventDefault()
         this.setState({filteredUsers: this.state.allUsers.filter(
             u => {
-                return u.name == searchInput || u.email == searchInput
+                return u.name === searchInput || u.email === searchInput
             }
         ), searchQuery : ""
         })
@@ -142,7 +205,7 @@ class Setting extends React.Component {
                     <p>Name: {this.state.editUser.name}</p>
                     <p>Email: {this.state.editUser.email}</p>
                     <p>Status: </p>
-                    <select name="status" id="user-status">
+                    <select name="status" id="user-status" onChange={this.handleStatusChange} >
                         <option value="active">Active</option>
                         <option value="inactive">Inactive</option>
                     </select>
