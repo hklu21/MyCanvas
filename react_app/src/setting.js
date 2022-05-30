@@ -116,7 +116,7 @@ class Setting extends React.Component {
                         this.setState({
                             userAlreadyRegisteredCourses: result.data.map((item) => item.course_id) // Courses that the edit user already taken
                         }, () => {
-                            
+                            console.log("already taken courses:", this.state.userAlreadyRegisteredCourses)
                             var newCourses;
                             newCourses = this.state.courses.filter(course => !(this.state.userAlreadyRegisteredCourses.includes(course)))
                             this.setState({newCoursesToSelect: newCourses}, () => {
@@ -188,7 +188,7 @@ class Setting extends React.Component {
             'selectedCourses': this.state.selectedCourses
         }
 
-        fetch(`http://localhost:3000/users/courses/`, {  
+        fetch(`http://localhost:3000/users/${this.state.editUser.rowid}/courses/`, {  
             method: 'POST', 
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(newUserCoursesData)  
