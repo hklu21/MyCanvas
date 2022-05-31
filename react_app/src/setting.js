@@ -253,8 +253,10 @@ class Setting extends React.Component {
                 return u.name === searchInput || u.email === searchInput
             }
         ), searchQuery : ""
+        }, () => {
+            this.setState({showUsers: this.state.filteredUsers})
         })
-        this.setState({showUsers: this.state.filteredUsers})
+        
     }
 
 
