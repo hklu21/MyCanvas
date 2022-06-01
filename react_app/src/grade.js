@@ -1,16 +1,18 @@
 import React from 'react';
 import './course.css';
-import {AssignmentItem} from "./assignment";
 
-//
-// class AssignmentItem {
-//     constructor(name, due, grade, outOf) {
-//         this.name = name
-//         this.due = due
-//         this.grade = grade
-//         this.outOf = outOf
-//     }
-// }
+
+class GradeItem {
+    constructor(student_name, name, dueDate, grade, maxPoint, details, rowid = null) {
+        this.student_name = student_name
+        this.name = name
+        this.dueDate = dueDate
+        this.grade = grade
+        this.maxPoint = maxPoint
+        this.details = details
+        this.rowid = rowid
+    }
+}
 
 class Grade extends React.Component {
     constructor(props) {
@@ -27,14 +29,16 @@ class Grade extends React.Component {
 
     loadData = () => {
         // fetch("http://localhost:3000/assignment")
-        fetch(`http://localhost:3000/courses/${this.props.activeCourse}/assignments?rowid=${this.props.accountID}`) 
+        fetch(`http://localhost:3000/courses/${this.props.activeCourse}/grades?user_rowid=${(this.props.accountType === "Teacher") ? "" : this.props.accountID}`)
             .then(res => res.json())
             .then(
                 (result) => {
                     this.setState({
-                        assignments: result.data.map((item) => new AssignmentItem(
-                            item.name,
+                        assignments: result.data.map((item) => new GradeItem(
+                            item.user_name,
+                            item.assignment_name,
                             item.dueDate,
+                            item.grade,
                             item.maxPoint,
                             item.details,
                             item.rowid
@@ -64,7 +68,7 @@ class Grade extends React.Component {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ grade: e.target.grade.value })
             };
-            await fetch('http://localhost:3000/assignment/' + String(assignment.id) + "/grade", requestOptions)
+            await fetch('http://localhost:3000/assignment/' + String(assignment.rowid) + "/grade", requestOptions)
                 .then(response => response.json())
 
             this.loadData()
@@ -81,7 +85,8 @@ class Grade extends React.Component {
             <h1>Grades for {this.props.activeCourse}</h1>
             <table>
                 <tr>
-                    <th>Name</th>
+                    <th>Student Name</th>
+                    <th>Assignment Name</th>
                     <th>Due</th>
                     <th>Grade</th>
                     <th>Out of</th>
@@ -90,12 +95,13 @@ class Grade extends React.Component {
 
                 {this.state.assignments.map(assignment =>
                     <tr>
+                        <td>{assignment.student_name}</td>
                         <td><a href="#">{assignment.name}</a></td>
                         <td>{assignment.dueDate}</td>
                         <td>{assignment.grade}</td>
                         <td>{assignment.maxPoint}</td>
                         <td>
-                            {this.props.accountType === "Admin" &&
+                            {this.props.accountType === "Teacher" &&
                                 <button onClick={() => {
                                     this.setState({
                                         updatingAssignmentItem: assignment

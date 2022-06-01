@@ -1,5 +1,7 @@
 import React from 'react';
 import './course.css';
+import Assignment, {AssignmentItem} from "./assignment";
+import Grade from "./grade";
 
 
 class AnnouncementItem {
@@ -21,7 +23,20 @@ class Announcement extends React.Component {
     }
 
     componentDidMount() {
+        this.loadData()
+    }
 
+    loadData = async () => {
+        await fetch('http://localhost:3000/announcement/' + this.props.activeCourse)
+            .then(res => res.json())
+            .then(
+                (result) => {
+                    console.log(result)
+                    this.setState({
+                        announcements: result.data.map(announcement => new AnnouncementItem(announcement.content, announcement.postedOn))
+                    });
+                }
+            )
     }
 
     renderAddForm = () => {
@@ -29,13 +44,22 @@ class Announcement extends React.Component {
             e.preventDefault()
 
             let item = new AnnouncementItem(e.target.content.value, new Date().toLocaleString())
-            this.setState((state) => {
-                let items = state.announcements
-                items.push(item)
-                return items
-            })
 
-            e.target.content.value = ""
+            var data = {
+                content: item.content,
+                postedOn: item.postedOn,
+            }
+            fetch(`http://localhost:3000/announcement/` + this.props.activeCourse, {  // Enter your IP address here
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data) // body data type must match "Content-Type" header
+            })
+                .then(async () => {
+                    await this.loadData()
+
+                    e.target.content.value = ""
+                })
+
         }}>
             Add announcement: <br/>
             Content:<textarea name="content"/><br/>
@@ -60,7 +84,7 @@ class Announcement extends React.Component {
                 )}
             </table>
             <br/>
-            {this.props.accountType === "Admin" &&
+            {this.props.accountType === "Teacher" &&
                 this.renderAddForm()
             }
         </>

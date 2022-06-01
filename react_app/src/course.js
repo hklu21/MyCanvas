@@ -15,10 +15,29 @@ class Course extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            courses: ["MPCS 52553", "MPCS 51222"],
+            courses: [],
             activeCourse: null,
-            activeTab: 0
+            activeTab: 0,
+            displayCreateForm: false,
+            teachers: []
         };
+    }
+
+    componentDidMount() {
+        this.loadData()
+    }
+
+    loadData = async () => {
+        await fetch('http://localhost:3000/courses')
+            .then(res => res.json())
+            .then(
+                (result) => {
+                    console.log(result)
+                    this.setState({
+                        courses: result.data
+                    });
+                }
+            )
     }
 
     renderNavBar = () => {
@@ -60,25 +79,82 @@ class Course extends React.Component {
                 e.preventDefault()
 
                 this.setState({
+                    displayCreateForm: false,
                     activeCourse: e.target.course.value
                 })
             }}>
                 <select name="course">
                     {this.state.courses.map((course) => {
-                        return <option value={course}>{course}</option>
+                        return <option value={course.course_id}>{course.course_id}</option>
                     })})
                 </select>
                 <button type="submit">View</button>
+                <button type="button" onClick={this.loadData}>Refresh</button>
+                {this.props.accountType === "Admin" &&
+                    <button type="button" onClick={() => {
+                        fetch('http://localhost:3000/account/teachers')
+                            .then(res => res.json())
+                            .then(
+                                (result) => {
+                                    console.log(result)
+                                    this.setState({
+                                        displayCreateForm: true,
+                                        activeCourse: null,
+                                        teachers: result.data
+                                    })
+                                }
+                            )
+
+                    }
+                    }>Create</button>
+                }
             </form>
 
             {this.state.activeCourse &&
-                <>
+                <div key={this.state.activeCourse}>
                     Current course: {this.state.activeCourse}
                     <br/>
                     {this.renderNavBar()}
                     <br/>
                     {currentTab}
-                </>
+                </div>
+            }
+
+            {this.state.displayCreateForm &&
+                <form onSubmit={(e) => {
+                    e.preventDefault()
+
+                    var createCourseData = {
+                        'course_name': e.target.course_name.value,
+                        'description': e.target.description.value,
+                        'capacity':e.target.capacity.value,
+                        'teacher': e.target.teacher.value
+
+                    }
+
+                    fetch(`http://localhost:3000/courses/`, {  // Enter your IP address here
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(createCourseData) // body data type must match "Content-Type" header
+                    })
+                        .then(async () => {
+                            await this.setState({
+                                displayCreateForm: false
+                            })
+
+                            this.loadData()
+                        })
+                }}>
+                    Course Name: <input name="course_name" rows="10"></input><br/><br/>
+                    Description: <textarea name="description" rows="10"></textarea><br/><br/>
+                    Capacity: <input name="capacity" rows="10"></input><br/><br/>
+                    <select name="teacher">
+                        {this.state.teachers.map((teacher) => {
+                            return <option value={teacher.email}>{teacher.name}</option>
+                        })})
+                    </select>
+                    <input type="submit" value="Create Course"/>
+                </form>
             }
         </section>
     }
