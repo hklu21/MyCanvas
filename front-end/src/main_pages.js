@@ -5,6 +5,17 @@ import './account.css';
 import Course from "./course";
 import Setting from "./setting";
 import Dashboard from './dashboard';
+
+class SettingsButton extends React.Component {
+    render() {
+        if (this.props.accountType !== 'Admin') {
+            return null;
+        } else {
+            return <a className={this.props.pageShow[3]? "active":""} href="#Setting" 
+                    onClick={this.props.clickSetting}>Setting</a>
+        }
+    }
+}
 class NavBar extends React.Component {
     render() {
         return(
@@ -17,8 +28,8 @@ class NavBar extends React.Component {
                         onClick={this.props.clickCourse}>Course</a>
                     <a className={this.props.pageShow[2]? "active":""} href="#Account"
                         onClick={this.props.clickAccount}>Account</a>
-                    <a className={this.props.pageShow[3]? "active":""} href="#Setting"
-                        onClick={this.props.clickSetting}>Setting</a>
+                    <SettingsButton accountType={this.props.accountType} pageShow={this.props.pageShow}
+                            clickSetting={this.props.clickSetting}/>
                     <a href="#LogOut" onClick={this.props.clickLogOut}>Log Out</a>
                 </div>
             </nav>
@@ -102,6 +113,7 @@ class MainPages extends React.Component {
                         <NavBar pageShow={this.state.pageShow} clickAccount={this.clickAccount} 
                             clickCourse={this.clickCourse} clickDashBoard={this.clickDashBoard}
                             clickSetting={this.clickSetting} clickLogOut={this.clickLogOut}
+                            accountType={this.props.accountType}
                         />
                         <Account account_id={this.props.account_id}/>
                     </div>
@@ -112,6 +124,7 @@ class MainPages extends React.Component {
                         <NavBar pageShow={this.state.pageShow} clickAccount={this.clickAccount} 
                             clickCourse={this.clickCourse} clickDashBoard={this.clickDashBoard}
                             clickSetting={this.clickSetting} clickLogOut={this.clickLogOut}
+                            accountType={this.props.accountType}
                         />
                         <Dashboard account_id={this.props.account_id}/>
                     </div>
@@ -122,6 +135,7 @@ class MainPages extends React.Component {
                         <NavBar pageShow={this.state.pageShow} clickAccount={this.clickAccount} 
                             clickCourse={this.clickCourse} clickDashBoard={this.clickDashBoard}
                             clickSetting={this.clickSetting} clickLogOut={this.clickLogOut}
+                            accountType={this.props.accountType}
                         />
                         <Course accountID={this.props.account_id} accountType={this.state.accountType}/>
                     </div>
@@ -132,6 +146,7 @@ class MainPages extends React.Component {
                         <NavBar pageShow={this.state.pageShow} clickAccount={this.clickAccount} 
                             clickCourse={this.clickCourse} clickDashBoard={this.clickDashBoard}
                             clickSetting={this.clickSetting} clickLogOut={this.clickLogOut}
+                            accountType={this.props.accountType}
                         />
                         <Setting />
                     </div>

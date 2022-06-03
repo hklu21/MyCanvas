@@ -8,11 +8,19 @@ class SecurityQuestions extends React.Component {
             ans_1: '',
             ans_2: '',
             ans_3: '',
+            pwd: '',
+            alert: [''],
+            alertShow: [false],
         };
         this.clickSave = this.clickSave.bind(this);
+        this.handlePwdChange = this.handlePwdChange.bind(this);
         this.handleQuestion1 = this.handleQuestion1.bind(this);
         this.handleQuestion2 = this.handleQuestion2.bind(this);
         this.handleQuestion3 = this.handleQuestion3.bind(this);
+    }
+
+    handlePwdChange(event) {
+        this.setState({pwd: event.target.value});
     }
 
     handleQuestion1(event) {
@@ -28,10 +36,22 @@ class SecurityQuestions extends React.Component {
     }
 
     clickSave(event) {
-        this.props.handleQuestion1(this.state.ans_1);
-        this.props.handleQuestion2(this.state.ans_2);
-        this.props.handleQuestion3(this.state.ans_3);
-        this.props.clickSave(this.state.ans_1, this.state.ans_2, this.state.ans_3);
+        if (this.state.pwd === "") {
+            const newAlert = this.state.alert.slice();
+            newAlert[0] = "Current password is required."
+            this.setState({alert: newAlert});
+            this.setState({alertShow: [true]});
+        } else if (this.state.pwd !== this.props.pwd) {
+            const newAlert = this.state.alert.slice();
+            newAlert[0] = "Wrong password."
+            this.setState({alert: newAlert});
+            this.setState({alertShow: [true]});
+        } else {
+            this.props.handleQuestion1(this.state.ans_1);
+            this.props.handleQuestion2(this.state.ans_2);
+            this.props.handleQuestion3(this.state.ans_3);
+            this.props.clickSave(this.state.ans_1, this.state.ans_2, this.state.ans_3);
+        }
         event.preventDefault();
     }
 
@@ -39,6 +59,11 @@ class SecurityQuestions extends React.Component {
         return this.props.isChangingSQ? (
             <div className="security_questions">
                 <br/>
+                <h6>{this.state.alertShow[0]?this.state.alert[0]:""}</h6>
+                <input type="password" name="curr_pwd" id="curr_pwd" placeholder="*Current Password"
+                    onChange={this.handlePwdChange}
+                />
+
                 <h6>Security Question 1</h6>
                 <input type="text" name="security_question_1" id="q1" placeholder="What's father's first name?"
                     onChange={this.handleQuestion1}
@@ -370,7 +395,7 @@ class Account extends React.Component {
                         </button>
                         <SecurityQuestions isChangingSQ={this.state.isChangingSQ} clickSave={this.clickSave}
                             handleQuestion1={this.handleQuestion1} handleQuestion2={this.handleQuestion2}
-                            handleQuestion3={this.handleQuestion3}
+                            handleQuestion3={this.handleQuestion3} pwd={this.state.pwd}
                         />
                         <ChangePwd isChangingPwd={this.state.isChangingPwd} clickConfirm={this.clickConfirm}
                             handlePwdChange={this.handlePwdChange} pwd={this.state.pwd}
