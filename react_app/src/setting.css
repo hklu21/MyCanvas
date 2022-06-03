@@ -16,6 +16,10 @@ body{
     font-weight: bold;
 }
 
+.dashboardPage thead td {
+    font-weight: bold;
+}
+
 .setting_page td {
     text-align: left;
     padding: 8px;

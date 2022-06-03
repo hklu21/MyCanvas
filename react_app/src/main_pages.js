@@ -4,6 +4,7 @@ import logo from './logo.png'
 import './account.css';
 import Course from "./course";
 import Setting from "./setting";
+import Dashboard from './dashboard';
 class NavBar extends React.Component {
     render() {
         return(
@@ -51,7 +52,7 @@ class MainPages extends React.Component {
     }
 
     clickDashBoard(){
-        alert("DashBoard");
+        // alert("DashBoard");
         this.setState({page: "DashBoard"});
         this.setState({pageShow: [true, false, false, false]});
     }
@@ -112,6 +113,7 @@ class MainPages extends React.Component {
                             clickCourse={this.clickCourse} clickDashBoard={this.clickDashBoard}
                             clickSetting={this.clickSetting} clickLogOut={this.clickLogOut}
                         />
+                        <Dashboard account_id={this.props.account_id}/>
                     </div>
                 );
             case "Course":
