@@ -101,7 +101,7 @@ class LogInForm extends React.Component {
                     // admin is always active
                     if (this.state.account_info[0]['account_type'] !== 'Admin') {
                         const newAlert = this.state.alert.slice();
-                        newAlert[2] = "Accout type not match."
+                        newAlert[2] = "Account type not match."
                         this.setState({alert: newAlert});
                         this.setState({alertShow: [false, false, true]});
                     } else {
@@ -111,12 +111,12 @@ class LogInForm extends React.Component {
                 } else if (this.state.accountType === 'User') {
                     if (this.state.account_info[0]['account_type'] === 'Admin') {
                         const newAlert = this.state.alert.slice();
-                        newAlert[2] = "Accout type not match."
+                        newAlert[2] = "Account type not match."
                         this.setState({alert: newAlert});
                         this.setState({alertShow: [false, false, true]});
                     } else if (this.state.account_info[0]['activity'] === 0) {
                         const newAlert = this.state.alert.slice();
-                        newAlert[0] = "Accout not active."
+                        newAlert[0] = "Account not active."
                         this.setState({alert: newAlert});
                         this.setState({alertShow: [true, false, false]});
                     } else {

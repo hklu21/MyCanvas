@@ -356,9 +356,10 @@ class Account extends React.Component {
 
     render() {
         return(
+            <section id="account_box">
             <div id="accountPage">
-                <h1>My Accout Information</h1>
-                <section id="account_box">
+                <h1>My Account Information</h1>
+                
                     <form id="accout_form">
                         <h2>{this.state.isEditing? "Editing your profile" : ""}</h2> 
                         <div>
@@ -401,8 +402,9 @@ class Account extends React.Component {
                             handlePwdChange={this.handlePwdChange} pwd={this.state.pwd}
                         />
                     </form>
-                </section>
+                
             </div>
+            </section>
         );
     }
 }

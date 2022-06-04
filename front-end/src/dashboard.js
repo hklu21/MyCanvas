@@ -406,12 +406,14 @@ class Dashboard extends React.Component {
 
     render() {
         return(
-            <div id="dashboardPage">
-                <h1>Dashboard</h1>
-                <StudentDashboard account_type={this.state.account_type} account_id={this.props.account_id}/>
-                <TeacherDashboard account_type={this.state.account_type} account_id={this.props.account_id}/>
-                <AdminDashboard account_type={this.state.account_type} account_id={this.props.account_id}/>
-            </div>
+            <section>
+                <div id="dashboardPage">
+                    <h1>Dashboard</h1>
+                    <StudentDashboard account_type={this.state.account_type} account_id={this.props.account_id}/>
+                    <TeacherDashboard account_type={this.state.account_type} account_id={this.props.account_id}/>
+                    <AdminDashboard account_type={this.state.account_type} account_id={this.props.account_id}/>
+                </div>
+            </section>
         );
     }
 }

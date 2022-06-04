@@ -129,7 +129,6 @@ class Course extends React.Component {
                         'description': e.target.description.value,
                         'capacity':e.target.capacity.value,
                         'teacher': e.target.teacher.value
-
                     }
 
                     fetch(`http://localhost:3000/courses/`, {  // Enter your IP address here

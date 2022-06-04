@@ -23,10 +23,21 @@ DROP TABLE IF EXISTS course;
 DROP TABLE IF EXISTS user_course;
 DROP TABLE IF EXISTS student_assignment;
 
-CREATE TABLE IF NOT EXISTS course 
+-- CREATE TABLE IF NOT EXISTS course 
+-- (
+--     course_id character NOT NULL
+-- );
+
+CREATE TABLE IF NOT EXISTS "course"
 (
-    course_id character NOT NULL
+    course_id      character not null,
+    description    text,
+    capacity       integer,
+    course_teacher text
+        constraint course_teacher
+            references user_infos (email)
 );
+
 
 CREATE TABLE IF NOT EXISTS assignment
 (
@@ -71,11 +82,6 @@ INSERT INTO user_course VALUES ('t10002', 'MPCS 52553');
 -- admin has access to all courses
 INSERT INTO user_course VALUES ('a00001', 'MPCS 51222');
 INSERT INTO user_course VALUES ('a00001', 'MPCS 52553');
-
-
--- Problems:
--- I haven't figured out how to automatically refresh the page when a new assignment is created. This is necessary because when a teacher creates a new assignment, it would be better for the new assignment to be shown right after being created. And it's also not possible to refresh the Assignment page when I am on this page and I click the Assignment page again. I'll have to switch to other tabs like grades and then click the assignment tab again to refresh the page.
--- Don't know how to correct the route when clicking to view the detail of an assignment (It should be /#Assignments/assignment_id but now it's null). I did something like "<a href={`#Assignment/${this.state.assignmentDetailId}`} className="assign-name-link" onClick={() => { this.setState({showAssignmentDetail: true, assignmentDetailId: assignment.rowid});}}>{assignment.name}</a>" in assignment.js but it does not update the state.assignmentDetailId when it's onClick, that's why it is null.
 
 
 
