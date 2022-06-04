@@ -23,6 +23,24 @@ npm start
 ```
 then type "yes" to open a new port. And then the web application is avaliable at locahost with front-end server runned on port 3001 and back-end server runner on port 3000.
 
+## Existed Active Accounts:
+
+If you don't want to sign up new accounts and active them as an admin manully, use the following accounts:
+
+- admin:
+    - username: admin@uchicago.edu
+    - passwrd:  asd1!
+
+- teacher:
+    - username: teacher1@uchicago.edu
+    - passwrd:  asd1!
+
+- student: 
+    - username: student1@uchicago.edu
+    - passwrd:  asd1!
+
+
+
 ## Functionality
 
 ### As a user(Teacher or Student):
